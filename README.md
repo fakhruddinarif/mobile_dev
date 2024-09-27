@@ -3,162 +3,239 @@ Nama   : Muhammad Fakhruddin Arif
 NIM    : 2241720030
 Kelas  : TI-3C
 ```
-### Praktikum 1
-#### 1. Membuat project Flutter Langkah 1
-![screenshoot project flutter](images/w4_p1_1.png)
-``` text
-Pada langkah pertama ini, saya membuat project flutter menggunakan vscode dengan ketik ctrl + shift + p.
-```
-#### 2. Membuat project Flutter Langkah 2
-![screenshoot project flutter](images/w4_p1_2.png)
-``` text
-Pada langkah kedua ini, saya memilih folder untuk menyimpan project flutter yang akan saya buat.
-```
-#### 3. Membuat project Flutter Langkah 3
-![screenshoot project flutter](images/w4_p1_3.png)
-``` text
-Pada langkah ketiga ini, saya memberi nama project flutter yang akan saya buat dengan lowercase.
-```
-#### 4. Membuat project Flutter Langkah 4
-![screenshoot project flutter](images/w4_p1_4.png)
-``` text
-Pada langkah keempat ini, Project berhasil dibuat.
-```
-### Praktikum 2
-#### 1. Membuat repository baru
-![screenshoot repository baru](images/w4_p2_1.png)
-```text
-Pada praktikum 2 ini, saya membuat repository baru dengan memberi nama.
-```
-#### 2. Tampilan awal repository
-![screenshoot tampilan awal repository](images/w4_p2_2.png)
-```text
-Pada tampilan awal repository ini, saya mendapatkan link repository yang telah saya buat.
-```
-#### 3. Membuat git init
-![screenshoot git init](images/w4_p2_3.png)
-```text
-Pada langkah ini, saya membuat git init pada project flutter yang telah saya buat.
-```
-#### 4. Membuat git add
-![screenshoot git add](images/w4_p2_4.png)
-```text
-Pada langkah ini, saya membuat git add pada project flutter yang telah saya buat.
-```
-#### 5. Membuat git commit
-![screenshoot git commit](images/w4_p2_5.png)
-```text
-Pada langkah ini, saya membuat git commit pada project flutter yang telah saya buat.
-```
-#### 6. Push ke repository
-![screenshoot push ke repository](images/w4_p2_6.png)
-```text
-Pada langkah ini, saya membuat push ke repository pada project flutter yang telah saya buat.
-```
-#### 7 dan 8. Tambahkan remote repository ke local repository
-![screenshoot remote repository](images/w4_p2_10.png)
-```text
-Pada langkah ini, saya menambahkan remote repository ke local repository pada project flutter yang telah saya buat.
-```
-#### 9. Push .gitignore
-![screenshoot push gitignore](images/w4_p2_7.png)
-```text
-Pada langkah ini, saya membuat push .gitignore pada project flutter yang telah saya buat.
-```
-#### 10. Push project flutter
-![screenshoot push project flutter](images/w4_p2_8.png)
-```text
-Pada langkah ini, saya membuat push project flutter yang telah saya buat.
-```
-#### 11. Run project flutter
-![screenshoot run project flutter](images/w4_p2_9.png)
-```text
-Pada langkah ini, saya membuat run project flutter yang telah saya buat.
-```
-#### 12. Membuat teks dengan nama lengkap
-![screenshoot nama lengkap](images/01.png)
-```text
-Pada praktikum akhir ini, saya membuat teks dengan nama lengkap saya.
-```
-
-### Praktikum 3
-#### 1. Membuat text widget
-![screenshoot text widget](images/02.png)
-```text
-Pada praktikum 3 ini, saya membuat text widget dengan menggunakan widget Text yang berisi nama lengkap saya.
-```
-#### 2. Image Widget
-![screenshoot image widget](images/03.png)
-```text
-Pada praktikum 3 ini, saya membuat image widget dengan menggunakan widget Image.
-```
-### Praktikum 4
-#### 1. Cupertino Button dan Loading Bar
-``` dart
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-
-class MyLoadingCupertino extends StatelessWidget {
-  const MyLoadingCupertino({Key? key}) : super(key: key);
-
-  @override
+### Praktikum 1: Membangun Layout di Flutter
+#### 1. File main.dart, Isilah dengan nama dan NIM anda pada text title
+```dart
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Container(
-        margin: const EdgeInsets.only(top: 30),
-        color: Colors.white,
-        child: Column(
-          children: <Widget>[
-            CupertinoButton(
-              child: const Text("Contoh button"),
-              onPressed: () {},
-            ),
-            const CupertinoActivityIndicator(),
-          ],
+      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Flutter layout demo'),
+        ),
+        body: const Center(
+          child: Text('Hello World'),
         ),
       ),
     );
   }
-}
 ```
-#### 2. Floating Action Button (FAB)
-``` dart
-import 'package:flutter/material.dart';
+Berikut adalah hasil dari kode diatas:
 
-class MyFabWidget extends StatelessWidget {
-  const MyFabWidget({Key? key}) : super(key: key);
+![Hasil Praktikum 1](images/w5_p1_02.png)
+
+#### 2. Implementasi title row
+``` dart
+Widget titleSection = Container(
+  padding: const EdgeInsets.all(32),
+  child: Row(
+    children: [
+      Expanded(
+        /* soal 1*/
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /* soal 2*/
+            Container(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: const Text(
+                'Wisata Gunung di Batu',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Text(
+              'Batu, Malang, Indonesia',
+              style: TextStyle(
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+      ),
+      /* soal 3*/
+      Icon(
+        Icons.star,
+        color: Colors.red,
+      ),
+      const Text("41"),
+    ],
+  ),
+);
+```
+Berikut adalah hasil dari kode diatas:
+
+![Hasil Praktikum 1](images/w5_p1_04.png)
+
+### Praktikum 2: Implementasi button Row
+#### 1. Buat Method Column _buildButtonColumn
+``` dart
+  Column _buildButtonColumn(Color color, IconData icon, String label) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(icon, color: color),
+        Container(
+          margin: const EdgeInsets.only(top: 8),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w400,
+              color: color,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+```
+#### 2. Buat widget buttonSection
+``` dart
+Widget buttonSection (Color color) => Row(
+  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  children: [
+    _buildButtonColumn(color, Icons.call, 'CALL'),
+    _buildButtonColumn(color, Icons.near_me, 'ROUTE'),
+    _buildButtonColumn(color, Icons.share, 'SHARE'),
+  ],
+);
+```
+#### 3. Tambah Section buttonSection pada body
+``` dart
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed code here!
-        },
-        child: const Icon(Icons.thumb_up),
-        backgroundColor: Colors.pink,
+    Color color = Theme.of(context).primaryColor;
+    return MaterialApp(
+      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Flutter layout demo'),
+        ),
+        body: Column(
+          children: [
+            titleSection,
+            buttonSection(color),
+          ],
+        )
       ),
     );
   }
 }
 ```
-#### 3. Scaffold Widget
-![screenshoot scaffold widget](images/04.png)
-```text
-Pada praktikum 4 ini, saya membuat scaffold widget dengan menggunakan widget Scaffold yang berisi appbar, body, dan floating action button.
+Berikut adalah hasil dari kode diatas:
+
+![Hasil Praktikum 2](images/w5_p2_03.png)
+
+### Praktikum 3: Implementasi text section
+#### 1. Buat widget textSection
+``` dart
+Widget textSection = Container(
+  padding: const EdgeInsets.all(32),
+  child: const Text(
+    "Gunung Bromo adalah salah satu destinasi wisata paling populer di Indonesia, terutama bagi para pecinta alam dan fotografi."
+    " Muhammad Fakhruddin Arif | 2241720030."
+        " Selamat mengerjakan 🙂.",
+    softWrap: true,
+  ),
+);
 ```
-#### 4. Dialog Widget
-![screenshoot dialog widget](images/05.png)
-```text
-Pada praktikum 4 ini, saya membuat dialog widget dengan menggunakan widget AlertDialog yang berisi judul, konten, dan action.
+#### 2. Tambah Section textSection pada body
+``` dart
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Color color = Theme.of(context).primaryColor;
+    return MaterialApp(
+      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Flutter layout demo'),
+        ),
+        body: Column(
+          children: [
+            titleSection,
+            buttonSection(color),
+            textSection,
+          ],
+        )
+      ),
+    );
+  }
+}
 ```
-#### 5. Input dan Selection Widget
-![screenshoot input dan selection widget](images/06.png)
-```text
-Pada praktikum 4 ini, saya membuat input dan selection widget dengan menggunakan widget TextField.
+Berikut adalah hasil dari kode diatas:
+
+![Hasil Praktikum 3](images/w5_p3_02.png)
+
+### Praktikum 4: Implementasi image section
+#### 1. Siapkan asset gambar
+![Gunung Bromo](images/w5_p4_01.png)
+#### 2. Tambahkan gambar ke body
+``` dart
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Color color = Theme.of(context).primaryColor;
+    return MaterialApp(
+      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Flutter layout demo'),
+        ),
+        body: Column(
+          children: [
+            Image.asset('assets/images/bromo.jpg', width: 600, height: 240, fit: BoxFit.cover,),
+            titleSection,
+            buttonSection(color),
+            textSection,
+          ],
+        )
+      ),
+    );
+  }
+}
 ```
-#### 6. Date and Time Pickers
-![screenshoot date and time pickers](images/07.png)
-```text
-Pada praktikum 4 ini, saya membuat date and time pickers widget dengan menggunakan widget DateTimePicker.
+Berikut adalah hasil dari kode diatas:
+
+![Hasil Praktikum 4](images/w5_p4_02.png)
+
+#### 3. Ubah menjadi ListView
+``` dart
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Color color = Theme.of(context).primaryColor;
+    return MaterialApp(
+      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
+      home: Scaffold(
+        appBar: AppBar(
+          title: const Text('Flutter layout demo'),
+        ),
+        body: ListView(
+          children: [
+            Image.asset('assets/images/bromo.jpg', width: 600, height: 240, fit: BoxFit.cover,),
+            titleSection,
+            buttonSection(color),
+            textSection,
+          ],
+        )
+      ),
+    );
+  }
+}
 ```
+Berikut adalah hasil dari kode diatas:
+
+![Hasil Praktikum 4](images/w5_p4_03.png)
