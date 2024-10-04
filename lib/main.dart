@@ -1,19 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mobile_dev/basic_widgets/scaffold_widget.dart';
+import 'package:mobile_dev/pages/home_page.dart';
+import 'package:mobile_dev/pages/item_page.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+final GoRouter _router = GoRouter(
+  initialLocation: '/',
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => HomePage(),
+    ),
+    GoRoute(
+      path: '/item',
+      builder: (context, state) => ItemPage(),
+    ),
+  ],
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    Color color = Theme.of(context).primaryColor;
-    return MaterialApp(
-      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
-      home: Scaffold(
+    // Color color = Theme.of(context).primaryColor;
+    return MaterialApp.router(
+      routerConfig: _router,
+      // title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
+      /*home: Scaffold(
         appBar: AppBar(
           title: const Text('Flutter layout demo'),
         ),
@@ -25,7 +43,12 @@ class MyApp extends StatelessWidget {
             textSection,
           ],
         )
-      ),
+      ),*/
+      /*initialRoute: '/',
+      routes: {
+        '/': (context) => HomePage(),
+        '/item': (context) => ItemPage(),
+      },*/
     );
   }
 }
