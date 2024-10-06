@@ -538,3 +538,9 @@ class MyApp extends StatelessWidget {
 ```
 Berikut adalah hasil dari kode diatas:
 ![Hasil Tugas 6](images/w5_t2_6.mp4)
+
+Home Page:
+![Hasil Tugas 6 Home](images/w5_t2_6_home.png)
+
+Item Page:
+![Hasil Tugas 6 Home](images/w5_t2_6_item.png)

@@ -32,6 +32,10 @@ class HomePage extends StatelessWidget {
                       context.go('/item', extra: items[index]);
                     },
                     child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      shadowColor: Colors.grey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -39,17 +43,37 @@ class HomePage extends StatelessWidget {
                           Expanded(
                             child: Hero(
                               tag: 'itemPhoto-${items[index].name}',
-                              child: Image.asset(items[index].photo, fit: BoxFit.cover),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(8),
+                                    topRight: Radius.circular(8),
+                                  ),
+                                  image: DecorationImage(
+                                    image: AssetImage(items[index].photo),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(items[index].name),
-                              Text('Rp ${items[index].price}'),
-                              Text('Stock: ${items[index].stock}'),
-                              Text('Rating: ${items[index].rating}'),
-                            ],
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(items[index].name),
+                                Text('Rp ${items[index].price}', style: TextStyle(fontWeight: FontWeight.bold)),
+                                Row(
+                                  children: [
+                                    Icon(Icons.star, color: Colors.orangeAccent),
+                                    Text(items[index].rating.toString()),
+                                    SizedBox(width: 8),
+                                    Text('${items[index].stock} Stock'),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
