@@ -3,544 +3,158 @@ Nama   : Muhammad Fakhruddin Arif
 NIM    : 2241720030
 Kelas  : TI-3C
 ```
-### Praktikum 1: Membangun Layout di Flutter
-#### 1. File main.dart, Isilah dengan nama dan NIM anda pada text title
-```dart
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter layout demo'),
-        ),
-        body: const Center(
-          child: Text('Hello World'),
-        ),
-      ),
-    );
-  }
+### Praktikum 
+#### 1. Menambahkan plugin
+Berikut adalah cara menambahkan plugin pada flutter:
+
+![hasil_terminal](images/w7_praktikum_2.png)
+Dan ini adalah hasilnya pada pubspec.yaml:
+
+![hasil_terminal](images/w7_praktikum_2_1.png)
+
+Penjelasan:
+``` text
+Pada langkah ini kita menambahkan plugin auto_size_text pada file pubspec.yaml.
+Kemudian kita menjalankan perintah flutter pub get untuk menginstal plugin auto_size_text.
+plugin auto_size_text digunakan untuk membuat text yang bisa menyesuaikan ukuran fontnya.
 ```
-Berikut adalah hasil dari kode diatas:
 
-![Hasil Praktikum 1](images/w5_p1_02.png)
-
-#### 2. Implementasi title row
-``` dart
-Widget titleSection = Container(
-  padding: const EdgeInsets.all(32),
-  child: Row(
-    children: [
-      Expanded(
-        /* soal 1*/
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            /* soal 2*/
-            Container(
-              padding: const EdgeInsets.only(bottom: 8),
-              child: const Text(
-                'Wisata Gunung di Batu',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            Text(
-              'Batu, Malang, Indonesia',
-              style: TextStyle(
-                color: Colors.grey,
-              ),
-            ),
-          ],
-        ),
-      ),
-      /* soal 3*/
-      Icon(
-        Icons.star,
-        color: Colors.red,
-      ),
-      const Text("41"),
-    ],
-  ),
-);
-```
-Berikut adalah hasil dari kode diatas:
-
-![Hasil Praktikum 1](images/w5_p1_04.png)
-
-### Praktikum 2: Implementasi button Row
-#### 1. Buat Method Column _buildButtonColumn
-``` dart
-  Column _buildButtonColumn(Color color, IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, color: color),
-        Container(
-          margin: const EdgeInsets.only(top: 8),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w400,
-              color: color,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-```
-#### 2. Buat widget buttonSection
-``` dart
-Widget buttonSection (Color color) => Row(
-  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-  children: [
-    _buildButtonColumn(color, Icons.call, 'CALL'),
-    _buildButtonColumn(color, Icons.near_me, 'ROUTE'),
-    _buildButtonColumn(color, Icons.share, 'SHARE'),
-  ],
-);
-```
-#### 3. Tambah Section buttonSection pada body
-``` dart
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Color color = Theme.of(context).primaryColor;
-    return MaterialApp(
-      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter layout demo'),
-        ),
-        body: Column(
-          children: [
-            titleSection,
-            buttonSection(color),
-          ],
-        )
-      ),
-    );
-  }
-}
-```
-Berikut adalah hasil dari kode diatas:
-
-![Hasil Praktikum 2](images/w5_p2_03.png)
-
-### Praktikum 3: Implementasi text section
-#### 1. Buat widget textSection
-``` dart
-Widget textSection = Container(
-  padding: const EdgeInsets.all(32),
-  child: const Text(
-    "Gunung Bromo adalah salah satu destinasi wisata paling populer di Indonesia, terutama bagi para pecinta alam dan fotografi."
-    " Muhammad Fakhruddin Arif | 2241720030."
-        " Selamat mengerjakan 🙂.",
-    softWrap: true,
-  ),
-);
-```
-#### 2. Tambah Section textSection pada body
-``` dart
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Color color = Theme.of(context).primaryColor;
-    return MaterialApp(
-      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter layout demo'),
-        ),
-        body: Column(
-          children: [
-            titleSection,
-            buttonSection(color),
-            textSection,
-          ],
-        )
-      ),
-    );
-  }
-}
-```
-Berikut adalah hasil dari kode diatas:
-
-![Hasil Praktikum 3](images/w5_p3_02.png)
-
-### Praktikum 4: Implementasi image section
-#### 1. Siapkan asset gambar
-![Gunung Bromo](images/w5_p4_01.png)
-#### 2. Tambahkan gambar ke body
-``` dart
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Color color = Theme.of(context).primaryColor;
-    return MaterialApp(
-      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter layout demo'),
-        ),
-        body: Column(
-          children: [
-            Image.asset('assets/images/bromo.jpg', width: 600, height: 240, fit: BoxFit.cover,),
-            titleSection,
-            buttonSection(color),
-            textSection,
-          ],
-        )
-      ),
-    );
-  }
-}
-```
-Berikut adalah hasil dari kode diatas:
-
-![Hasil Praktikum 4](images/w5_p4_02.png)
-
-#### 3. Ubah menjadi ListView
-``` dart
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Color color = Theme.of(context).primaryColor;
-    return MaterialApp(
-      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Flutter layout demo'),
-        ),
-        body: ListView(
-          children: [
-            Image.asset('assets/images/bromo.jpg', width: 600, height: 240, fit: BoxFit.cover,),
-            titleSection,
-            buttonSection(color),
-            textSection,
-          ],
-        )
-      ),
-    );
-  }
-}
-```
-Berikut adalah hasil dari kode diatas:
-
-![Hasil Praktikum 4](images/w5_p4_03.png)
-
-### Praktikum 5: Membangun Navigasi di Flutter
-#### 1. Siapkan Folder
-![Folder](images/w5_p5_01.png)
-#### 2. Mendefinisikan route
-##### Home Page
+#### 2. Buat file red_text_widget.dart
+Berikut adalah kode program yang ada pada file red_text_widget.dart:
 ``` dart
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
+class RedTextWidget extends StatelessWidget {
+  const RedTextWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    throw UnimplementedError();
+    return Container();
   }
 }
 ```
-##### Item Page
+Penjelasan:
+``` text
+Pada langkah ini kita membuat file red_text_widget.dart yang berisi class RedTextWidget yang merupakan stateless widget.
+Kemudian kita mengembalikan widget Container() pada method build().
+```
+#### 3. Tambah widget AutoSizeText
+Berikut adalah kode program yang ada pada file red_text_widget.dart:
 ``` dart
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
-class ItemPage extends StatelessWidget {
+class RedTextWidget extends StatelessWidget {
+  const RedTextWidget({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    throw UnimplementedError();
+    return AutoSizeText(
+      "Red Text",
+      style: const TextStyle(color: Colors.red, fontSize: 14),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
+    );
   }
 }
 ```
-throw UnimplementedError(); adalah pernyataan yang melemparkan sebuah error yang menunjukkan bahwa method build belum diimplementasikan. Ini biasanya digunakan sebagai placeholder untuk menunjukkan bahwa implementasi method ini belum selesai. Secara keseluruhan, kode ini mendefinisikan sebuah widget ItemPage dan HomePage yang belum diimplementasikan sepenuhnya. Method build yang seharusnya mengembalikan tampilan widget masih melemparkan UnimplementedError, yang berarti bahwa tampilan untuk ItemPage dan HomePage belum ditentukan.
-#### 3. Lengkapi kode main.dart
-``` dart
-initialRoute: '/',
-routes: {
-    '/': (context) => HomePage(),
-    '/home': (context) => ItemPage(),
-},
+Penjelasan:
+``` text
+Pada langkah ini kita mengubah widget Container() menjadi AutoSizeText().
+Kemudian kita menambahkan parameter text pada constructor.
+Kemudian kita mengembalikan widget AutoSizeText() dengan parameter text yang diterima dari constructor.
+Kemudian kita menambahkan style pada AutoSizeText() dengan warna merah dan ukuran font 14.
+Kemudian kita menambahkan maxLines: 2 dan overflow: TextOverflow.ellipsis.
 ```
-Kode ini mendefinisikan rute awal dan peta rute untuk aplikasi Flutter. initialRoute: '/' menetapkan rute awal aplikasi ke '/', yang berarti aplikasi akan menampilkan HomePage saat pertama kali dijalankan. Peta rute didefinisikan dalam objek routes, yang memetakan string rute ke widget yang sesuai. Rute '/' dipetakan ke HomePage, dan rute '/home' dipetakan ke ItemPage. Ketika aplikasi menavigasi ke rute '/home', ItemPage akan ditampilkan.
-#### 4. Membuat data model
+#### 4. Buat variabel text dan parameter di contructor
+Berikut adalah kode program yang ada pada file red_text_widget.dart:
 ``` dart
-class Item {
-  String name;
-  int price;
-
-  Item({required this.name, required this.price});
-}
-```
-Pada kode diatas, kita mendefinisikan sebuah class Item yang memiliki dua properti: name dan price. Properti name adalah string yang menyimpan nama item, sedangkan properti price adalah integer yang menyimpan harga item. Kita juga mendefinisikan sebuah constructor Item yang menerima dua parameter wajib: name dan price.
-#### 5. Lengkapi kode di class HomePage
-``` dart
-final List<Item> items = [
-    Item(name: 'Sugar', price: 5000),
-    Item(name: 'Salt', price: 2000),
-];
-```
-Kode diatas mendefinisikan sebuah list items yang berisi dua objek Item. Objek Item pertama memiliki nama 'Sugar' dan harga 5000, sedangkan objek Item kedua memiliki nama 'Salt' dan harga 2000.
-#### 6. Membuat ListView dan itemBuilder
-``` dart
-    return Scaffold(
-      body: Container(
-        margin: EdgeInsets.all(8),
-        child: ListView.builder(
-          padding: EdgeInsets.all(8),
-            itemCount: items.length,
-            itemBuilder: (context, index) {
-              final item = items[index];
-              return Card(
-                child: Container(
-                  margin: EdgeInsets.all(8),
-                  child: Row(
-                    children: [
-                      Expanded(child: Text(item.name)),
-                      Expanded(
-                          child: Text(
-                            item.price.toString(),
-                            textAlign: TextAlign.end,
-                          ),
-                      ),
-                    ],
-                  ),
-                )
-              );
-            }
-        ),
-      ),
-    );
-```
-Kode diatas membuat sebuah ListView.builder yang menampilkan daftar item dalam list items. ListView.builder memiliki dua parameter wajib: itemCount dan itemBuilder. Parameter itemCount menentukan jumlah item yang akan ditampilkan dalam ListView, sedangkan itemBuilder adalah fungsi yang digunakan untuk membuat widget untuk setiap item dalam list. Pada kode diatas, itemBuilder membuat sebuah Card untuk setiap item dalam list items. Card berisi dua widget Text yang menampilkan nama dan harga item. Widget Text yang menampilkan harga diberi properti textAlign: TextAlign.end agar teksnya ditampilkan di sebelah kanan.
-#### 7. Menambahkan aksi pada ListView
-``` dart
-            return InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/item');
-                },
-                child: Card(
-                  child: Container(
-                    margin: EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        Expanded(child: Text(item.name)),
-                        Expanded(
-                            child: Text(
-                              item.price.toString(),
-                              textAlign: TextAlign.end,
-                            ),
-                        ),
-                      ],
-                    ),
-                  )
-                ),
-              );
-```
-Kode diatas menambahkan sebuah InkWell ke dalam Card yang menampilkan item. InkWell adalah widget yang menambahkan efek interaktif ke dalam widget lain. Pada kode diatas, InkWell diberikan properti onTap yang menavigasikan pengguna ke rute '/item' saat item di-tap. Navigator.pushNamed(context, '/item') digunakan untuk menavigasikan pengguna ke rute '/item'. Kode ini akan menampilkan ItemPage saat item di-tap.
-
-Berikut adalah hasil dari kode diatas:
-![Hasil Praktikum 5](images/w5_p5_07.png)
-
-### Tugas 2
-#### 1. Perbarui code navigator
-``` dart
-        itemBuilder: (context, index) {
-              final item = items[index];
-              return InkWell(
-                onTap: () {
-                  Navigator.pushNamed(context, '/item', arguments: item);
-                },
-                child: Card(
-                  child: Container(
-                    margin: EdgeInsets.all(8),
-                    child: Row(
-                      children: [
-                        Expanded(child: Text(item.name)),
-                        Expanded(
-                            child: Text(
-                              item.price.toString(),
-                              textAlign: TextAlign.end,
-                            ),
-                        ),
-                      ],
-                    ),
-                  )
-                ),
-              );
-            }
-```
-Pada kode diatas, kita menambahkan parameter arguments pada Navigator.pushNamed(context, '/item', arguments: item);. Parameter arguments digunakan untuk mengirimkan data item ke ItemPage.
-#### 2. Tambahkan kode untuk menampilkan data item
-``` dart
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_dev/models/item.dart';
 
-class ItemPage extends StatelessWidget {
-  ItemPage({Key? key}) : super(key: key);
+class RedTextWidget extends StatelessWidget {
+  final String text;
+
+  const RedTextWidget({Key? key, required this.text}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    final itemArgs = ModalRoute.of(context)!.settings.arguments as Item;
-    // throw UnimplementedError();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Item ${itemArgs.name}'),
-      ),
-      body: Center(
-        child: Text('Name: ${itemArgs.name} | Price: ${itemArgs.price}'),
-      ),
+    return AutoSizeText(
+      text,
+      style: const TextStyle(color: Colors.red, fontSize: 14),
+      maxLines: 2,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }
 ```
-Pada kode diatas, kita mendapatkan data item yang dikirimkan dari HomePage menggunakan ModalRoute.of(context)!.settings.arguments as Item;. Kode ini mengambil data item dari arguments yang dikirimkan dari HomePage. Data item tersebut kemudian ditampilkan pada AppBar dan body ItemPage.
-
-Berikut adalah hasil dari kode diatas:
-![Hasil Tugas 2](images/w5_t2_2.png)
-#### 3. Modifikasi dengan GridView
-``` dart
-        GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            childAspectRatio: 0.75,
-          ),
-          itemCount: items.length,
-          itemBuilder: (context, index) {
-            return InkWell(
-              onTap: () {
-                Navigator.pushNamed(context, '/item', arguments: items[index]);
-              },
-              child: Card(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Image.asset(items[index].photo, fit: BoxFit.cover),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(items[index].name),
-                        Text('Rp ${items[index].price}'),
-                        Text('Stock: ${items[index].stock}'),
-                        Text('Rating: ${items[index].rating}'),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            );
-          },
-        ),
+Penjelasan:
+``` text
+Pada langkah ini kita menambahkan variabel text bertipe String pada class RedTextWidget.
+Kemudian kita menambahkan parameter text pada constructor.
+Kemudian kita mengubah parameter text menjadi required.
+Dan parameter text tersebut kita gunakan pada AutoSizeText().
 ```
-Pada kode diatas, kita mengubah ListView.builder menjadi GridView.builder. GridView.builder memiliki properti gridDelegate yang menentukan tata letak grid. SliverGridDelegateWithFixedCrossAxisCount
-digunakan untuk membuat grid dengan jumlah kolom tetap. Pada kode diatas, kita membuat grid dengan dua kolom menggunakan crossAxisCount: 2. Kita juga menentukan jarak antar kolom dan baris menggunakan crossAxisSpacing dan mainAxisSpacing. childAspectRatio
-digunakan untuk menentukan rasio aspek widget dalam grid. Pada kode diatas, kita menetapkan childAspectRatio: 0.75, yang berarti lebar widget dua kali lipat tingginya. Kita juga mengubah tampilan item dalam grid menjadi Card yang berisi gambar, nama, harga, stok, dan rating item.
+#### 5. Tambah widget di main.dart
+Berikut adalah hasil dari penambahan widget di main.dart:
 
-Berikut adalah hasil dari kode diatas:
-![Hasil Tugas 3](images/w5_t2_3.png)
+![hasil_terminal](images/w7_praktikum_6.png)
 
-Dan berikut adalah hasil dari kode diatas pada item page:
-![Hasil Tugas 3](images/w5_t2_3_2.png)
-#### 4. Hero Widget
-``` dart
-child: Hero(
-  tag: items[index].name,
-  child: Image.asset(items[index].photo, fit: BoxFit.cover),
-),
+Penjelasan:
+``` text
+Perbedaan pada widget AutoSizeText() dengan Text() adalah AutoSizeText() bisa menyesuaikan ukuran fontnya,
+sedangkan Text() tidak bisa menyesuaikan ukuran fontnya sesuai ukuran dari container.
 ```
-Berikut adalah hasil dari kode diatas:
-![Hasil Tugas 4](images/w5_t2_4.mp4)
 
-#### 5. Menambah footer nama dan nim
-``` dart
-Widget footerSection = Container(
-  padding: const EdgeInsets.all(16),
-  child: const Text(
-    'Nama: Muhammad Fakhruddin Arif | NIM: 2241720030',
-    textAlign: TextAlign.center,
-    style: TextStyle(
-      fontSize: 16,
-      fontWeight: FontWeight.bold,
-    ),
-  ),
-);
+### Tugas
+#### Jelaskan maksud dari tiap parameter yang ada di dalam plugin auto_size_text berdasarkan tautan pada dokumentasi 
+Berikut adalah penjelasan dari tiap parameter yang ada di dalam plugin auto_size_text berdasarkan tautan pada dokumentasi:
+``` text
+1. group: String
+   - Maksud dari parameter group adalah untuk mengelompokkan AutoSizeText yang memiliki group yang sama.
+   - Jika AutoSizeText memiliki group yang sama, maka AutoSizeText tersebut akan memiliki ukuran font yang sama.
+   - Jika AutoSizeText memiliki group yang berbeda, maka AutoSizeText tersebut akan memiliki ukuran font yang berbeda.
+2. maxLines: int
+   - Maksud dari parameter maxLines adalah untuk menentukan jumlah baris maksimal yang bisa ditampilkan oleh AutoSizeText.
+   - Jika AutoSizeText memiliki jumlah baris yang lebih dari maxLines, maka AutoSizeText akan menampilkan overflow.
+3. minFontSize: double
+    - Maksud dari parameter minFontSize adalah untuk menentukan ukuran font minimal yang bisa ditampilkan oleh AutoSizeText.
+    - Jika AutoSizeText memiliki ukuran font yang lebih kecil dari minFontSize, maka AutoSizeText akan menampilkan ukuran font minimal.
+4. maxFontSize: double
+    - Maksud dari parameter maxFontSize adalah untuk menentukan ukuran font maksimal yang bisa ditampilkan oleh AutoSizeText.
+    - Jika AutoSizeText memiliki ukuran font yang lebih besar dari maxFontSize, maka AutoSizeText akan menampilkan ukuran font maksimal.
+5. presetFontSizes: List<double>
+    - Maksud dari parameter presetFont
+    - Sizes adalah untuk menentukan ukuran font yang bisa ditampilkan oleh AutoSizeText.
+    - Jika AutoSizeText memiliki ukuran font yang lebih dari presetFontSizes, maka AutoSizeText akan menampilkan overflow.
+6. stepGranularity: double
+    - Maksud dari parameter stepGranularity adalah untuk menentukan ukuran font yang bisa ditampilkan oleh AutoSizeText.
+    - Jika AutoSizeText memiliki ukuran font yang lebih dari stepGranularity, maka AutoSizeText akan menampilkan overflow.
+7. style: TextStyle
+    - Maksud dari parameter style adalah untuk menentukan style dari AutoSizeText.
+    - Jika AutoSizeText memiliki style yang berbeda, maka AutoSizeText akan menampilkan style yang berbeda.
+8. strutStyle: StrutStyle
+    - Maksud dari parameter strutStyle adalah untuk menentukan strutStyle dari AutoSizeText.
+    - Jika AutoSizeText memiliki strutStyle yang berbeda, maka AutoSizeText akan menampilkan strutStyle yang berbeda.
+9. presetFontSizes: List<double>
+    - Maksud dari parameter presetFontSizes adalah untuk menentukan ukuran font yang bisa ditampilkan oleh AutoSizeText.
+    - Jika AutoSizeText memiliki ukuran font yang lebih dari presetFontSizes, maka AutoSizeText akan menampilkan overflow.
+10. locale: Locale
+    - Maksud dari parameter locale adalah untuk menentukan locale dari AutoSizeText.
+    - Jika AutoSizeText memiliki locale yang berbeda, maka AutoSizeText akan menampilkan locale yang berbeda.
+11. softWrap: bool
+    - Maksud dari parameter softWrap adalah untuk menentukan apakah AutoSizeText bisa melakukan wrap atau tidak.
+    - Jika AutoSizeText memiliki softWrap yang true, maka AutoSizeText akan melakukan wrap.
+12 wrapWords: bool
+    - Maksud dari parameter wrapWords adalah untuk menentukan apakah AutoSizeText bisa melakukan wrap pada kata atau tidak.
+    - Jika AutoSizeText memiliki wrapWords yang true, maka AutoSizeText akan melakukan wrap pada kata.
+13. overflow: TextOverflow
+    - Maksud dari parameter overflow adalah untuk menentukan overflow dari AutoSizeText.
+    - Jika AutoSizeText memiliki overflow yang berbeda, maka AutoSizeText akan menampilkan overflow yang berbeda.
+14. overflowReplacement: Widget
+    - Maksud dari parameter overflowReplacement adalah untuk menentukan widget yang akan ditampilkan jika AutoSizeText memiliki overflow.
+    - Jika AutoSizeText memiliki overflow, maka AutoSizeText akan menampilkan overflowReplacement.
+15. textScaleFactor: double
+    - Maksud dari parameter textScaleFactor adalah untuk menentukan faktor skala dari AutoSizeText.
+    - Jika AutoSizeText memiliki textScaleFactor yang berbeda, maka AutoSizeText akan menampilkan textScaleFactor yang berbeda.
 ```
-Berikut adalah hasil dari kode diatas:
-![Hasil Tugas 5](images/w5_t2_5.png)
-
-#### 6. Navigasi dan route go_router
-home_page.dart
-``` dart
-onTap: () {
-    context.go('/item', extra: items[index]);
-},
-```
-item_page.dart
-``` dart
-final itemArgs = context.extra as Item;
-
-appBar: AppBar(
-    title: Row(
-    children: [
-        IconButton(onPressed: () {
-        GoRouter.of(context).go('/');
-        }, icon: Icon(Icons.arrow_back)),
-        Text(itemArgs.name),
-    ],
-   ),
-),
-```
-main.dart
-``` dart
-final GoRouter _router = GoRouter(
-  initialLocation: '/',
-  routes: [
-    GoRoute(
-      path: '/',
-      builder: (context, state) => HomePage(),
-    ),
-    GoRoute(
-      path: '/item',
-      builder: (context, state) => ItemPage(),
-    ),
-  ],
-);
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Flutter layout: Muhammad Fakhruddin Arif dan 2241720030',
-      routerDelegate: _router.routerDelegate,
-      routeInformationParser: _router.routeInformationParser,
-    );
-  }
-}
-```
-Berikut adalah hasil dari kode diatas:
-![Hasil Tugas 6](images/w5_t2_6.mp4)
-
-Home Page:
-![Hasil Tugas 6 Home](images/w5_t2_6_home.png)
-
-Item Page:
-![Hasil Tugas 6 Home](images/w5_t2_6_item.png)
