@@ -1,12 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_dev/basic_widgets/red_text_widget.dart';
-import 'package:mobile_dev/basic_widgets/scaffold_widget.dart';
+import 'package:mobile_dev/models/data_layer.dart';
 import 'package:mobile_dev/pages/home_page.dart';
 import 'package:mobile_dev/pages/item_page.dart';
+import 'package:mobile_dev/provider/plan_provider.dart';
+import 'package:mobile_dev/views/plan_creator_screen.dart';
+import 'package:mobile_dev/views/plan_screen.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() => runApp(MasterPlanApp());
+
+class MasterPlanApp extends StatelessWidget {
+  const MasterPlanApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return PlanProvider(
+      notifier: ValueNotifier<List<Plan>>([]),
+      child: MaterialApp(
+        title: 'State management app',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const PlanCreatorScreen(),
+      ),
+    );
+  }
 }
 
 final GoRouter _router = GoRouter(
