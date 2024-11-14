@@ -33,7 +33,7 @@ class StreamHomePage extends StatefulWidget {
 }
 
 class _StreamHomePageState extends State<StreamHomePage> {
-  Color _color = Colors.blueGrey;
+  /*Color _color = Colors.blueGrey;
   late ColorStream colorStream;
 
   int lastNumber = 0;
@@ -79,7 +79,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
     numberStream = NumberStream();
     numberStreamController = numberStream.streamController;
     Stream stream = numberStreamController.stream.asBroadcastStream();
-    /*stream.listen((event) {
+    *//*stream.listen((event) {
       setState(() {
         lastNumber = event;
       });
@@ -87,9 +87,9 @@ class _StreamHomePageState extends State<StreamHomePage> {
       setState(() {
         lastNumber = -1;
       });
-    });*/
+    });*//*
 
-    /*transformer = StreamTransformer<int, int>.fromHandlers(
+    *//*transformer = StreamTransformer<int, int>.fromHandlers(
       handleData: (value, sink) {
         sink.add(value * 10);
       },
@@ -97,9 +97,9 @@ class _StreamHomePageState extends State<StreamHomePage> {
         sink.add(-1);
       },
       handleDone: (sink) => sink.close(),
-    );*/
+    );*//*
 
-    /*subscription = stream.listen((event) {
+    *//*subscription = stream.listen((event) {
       setState(() {
         lastNumber = event;
       });
@@ -113,9 +113,9 @@ class _StreamHomePageState extends State<StreamHomePage> {
 
     subscription.onDone(() {
       print('onDone was called');
-    });*/
+    });*//*
 
-    /*stream.transform(transformer).listen((event) {
+    *//*stream.transform(transformer).listen((event) {
       setState(() {
         lastNumber = event;
       });
@@ -123,7 +123,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
       setState(() {
         lastNumber = -1;
       });
-    });*/
+    });*//*
 
     subscription = stream.listen((event) {
       setState(() {
@@ -165,6 +165,39 @@ class _StreamHomePageState extends State<StreamHomePage> {
           ],
         ),
       )
+    );
+  }*/
+
+  late Stream<int> numberStream;
+
+  @override
+  void initState() {
+    super.initState();
+    numberStream = NumberStream().getNumbers();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Stream - Muhammad Fakhruddin Arif'),
+      ),
+      body: StreamBuilder(
+          stream: numberStream,
+         builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              print("Error");
+            }
+            if (snapshot.hasData) {
+              return Center(
+                child: Text(snapshot.data.toString(), style: const TextStyle(fontSize: 96),
+              ));
+            }
+            else {
+              return SizedBox.shrink();
+           }
+          }
+      ),
     );
   }
 }

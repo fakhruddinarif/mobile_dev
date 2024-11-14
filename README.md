@@ -87,3 +87,13 @@ Berikut hasil dari praktikum 4:
 - Setelah menggunakan `asBroadcastStream()`, stream dapat didengarkan oleh beberapa listener. Dan mengapa ketika button `New Random Number` ditekan text bertambah dua kali, karena stream dapat didengarkan oleh beberapa listener.
 Berikut hasil dari praktikum 5:
 ![Praktikum 5](images/13_05_11.gif)
+### Praktikum 6 - StreamBuilder
+#### Soal 12
+##### Jelaskan maksud kode langkah 3 sampai 7 tersebut!
+- Pada langkah 3, membuat fungsi `getNumbers()` yang digunakan untuk mengembalikan stream dari `numberStream` dengan random number.
+- Pada langkah 4, membuat build context dengan berisi `Container()`
+- Pada langkah 5, membuat variabel `numberStream` didalam main
+- Pada langkah 6, edit initState dengan menambahkan `getNumbers()`
+- Pada langkah 7, membuat `StreamBuilder` dengan `stream` dan `builder` yang digunakan untuk membangun widget.
+Berikut hasil dari praktikum 6:
+![Praktikum 6](images/13_06_12.gif)
