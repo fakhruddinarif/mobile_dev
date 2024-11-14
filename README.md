@@ -31,3 +31,13 @@ class ColorStream {
   ];
 }
 ```
+#### Soal 3
+##### Jelaskan fungsi keyword yield* pada kode tersebut!
+- `yield*` digunakan untuk mengembalikan nilai dari stream yang lain. Dalam kasus ini, `yield*` digunakan untuk mengembalikan nilai dari stream `colors` yang berisi list warna.
+- `yield*` akan mengembalikan nilai satu per satu dari stream yang dijadikan sebagai parameter.
+- `yield*` akan mengembalikan nilai dari stream yang dijadikan sebagai parameter sampai stream tersebut selesai.
+- `yield*` akan mengembalikan nilai dari stream yang dijadikan sebagai parameter secara berurutan.
+##### Apa maksud isi perintah kode tersebut?
+- Maksud dari kode tersebut adalah untuk mengembalikan nilai dari stream `colors` yang berisi list warna.
+- Setiap warna yang ada pada stream `colors` akan diambil satu per satu dan dikembalikan sebagai nilai stream.
+- Setelah semua warna pada stream `colors` diambil, maka stream akan selesai.
