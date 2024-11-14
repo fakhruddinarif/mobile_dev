@@ -15,13 +15,27 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Future Demo - Muhammad Fakhruddin Arif',
+      title: 'Stream - Muhammad Fakhruddin Arif',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: NavigationDialogScreen(),
+      home: const StreamHomePage(),
     );
+  }
+}
+
+class StreamHomePage extends StatefulWidget {
+  const StreamHomePage({Key? key}) : super(key: key);
+
+  @override
+  _StreamHomePageState createState() => _StreamHomePageState();
+}
+
+class _StreamHomePageState extends State<StreamHomePage> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
   }
 }
 
