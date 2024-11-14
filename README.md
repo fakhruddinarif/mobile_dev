@@ -45,3 +45,7 @@ class ColorStream {
 Hasil dari praktikum 1 adalah sebagai berikut:
 ![Praktikum 1](images/13_01_04.gif)
 #### Soal 5
+##### Jelaskan perbedaan menggunakan listen dan await for
+- `listen` digunakan untuk mendengarkan perubahan pada stream. Ketika stream mengeluarkan nilai, maka nilai tersebut akan diambil dan diproses.
+- `await for` digunakan untuk menunggu stream mengeluarkan nilai. Ketika stream mengeluarkan nilai, maka nilai tersebut akan diambil dan diproses.
+- Perbedaan antara `listen` dan `await for` adalah pada cara pengambilan nilai dari stream. `listen` akan mengambil nilai dari stream ketika stream mengeluarkan nilai, sedangkan `await for` akan menunggu stream mengeluarkan nilai.
