@@ -62,3 +62,12 @@ Berikut hasil dari praktikum 2:
 - Pada langkah 13, method `addError()` digunakan untuk menambahkan error ke dalam stream.
 - Pada langkah 14, menambahkan `onError` pada `initState()`.
 - Pada langkah 15, menambahkan `onError` pada `addRandomNumber()` digunakan sebagai pembacaan error.
+### Praktikum 3 - Injeksi data ke dalam Stream
+#### Soal 8
+##### Jelaskan maksud kode langkah 1 sampai 3 tersebut!
+- Pada langkah 1, membuat variabel `tranformer` dengan tipe `StreamTransformer` yang digunakan untuk mengubah nilai stream.
+- Pada langkah 2, tambahkan handler pada `initState` digunakan sebagai handle pada data.
+- Pada langkah 3, stream tranform dengan menggunakan listen untuk memanggil `lastNumber`.
+Berikut hasil dari praktikum 3:
+![Praktikum 3](images/13_03_08.gif)
+### Praktikum 4 - Subscribe ke stream events
