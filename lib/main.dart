@@ -6,6 +6,7 @@ import 'package:async/async.dart';
 import 'package:mobile_dev/geolocation.dart';
 import 'package:mobile_dev/navigation_dialog.dart';
 import 'package:mobile_dev/navigation_first.dart';
+import 'package:mobile_dev/streams/random_screen.dart';
 import 'package:mobile_dev/streams/stream.dart';
 
 void main() => runApp(const MyApp());
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const StreamHomePage(),
+      home: RandomScreen(),
     );
   }
 }

@@ -43,6 +43,7 @@ class ColorStream {
 - Setelah semua warna pada stream `colors` diambil, maka stream akan selesai.
 #### Soal 4
 Hasil dari praktikum 1 adalah sebagai berikut:
+
 ![Praktikum 1](images/13_01_04.gif)
 #### Soal 5
 ##### Jelaskan perbedaan menggunakan listen dan await for
@@ -56,6 +57,7 @@ Hasil dari praktikum 1 adalah sebagai berikut:
 - Memanggil numberStream, numberStreamController, dan stream kemudian listen pada stream tersebut dengan `lastNumber` = event.
 - Untuk bagian langkah 10, membuat method addRandomNumber yang digunakan untuk menambahkan angka random ke dalam stream.
 Berikut hasil dari praktikum 2:
+
 ![Praktikum 2](images/13_02_06.gif)
 #### Soal 7
 ##### Jelaskan maksud kode langkah 13 sampai 15 tersebut!
@@ -69,6 +71,7 @@ Berikut hasil dari praktikum 2:
 - Pada langkah 2, tambahkan handler pada `initState` digunakan sebagai handle pada data.
 - Pada langkah 3, stream tranform dengan menggunakan listen untuk memanggil `lastNumber`.
 Berikut hasil dari praktikum 3:
+
 ![Praktikum 3](images/13_03_08.gif)
 ### Praktikum 4 - Subscribe ke stream events
 #### Soal 9
@@ -77,6 +80,7 @@ Berikut hasil dari praktikum 3:
 - Pada langkah 6, menambahkan `subscription.cancel()` pada `dispose()` untuk membatalkan subscription.
 - Pada langkah 8, edit method `addRandomNumber` dengan menambahkan pengecekan apakah subscription sudah dibatalkan atau belum.
 Berikut hasil dari praktikum 4:
+
 ![Praktikum 4](images/13_04_09.gif)
 ### Praktikum 5 - Multiple stream subscriptions
 #### Soal 10
@@ -86,6 +90,7 @@ Berikut hasil dari praktikum 4:
 ##### Jelaskan mengapa hal tersebut dapat terjadi?
 - Setelah menggunakan `asBroadcastStream()`, stream dapat didengarkan oleh beberapa listener. Dan mengapa ketika button `New Random Number` ditekan text bertambah dua kali, karena stream dapat didengarkan oleh beberapa listener.
 Berikut hasil dari praktikum 5:
+
 ![Praktikum 5](images/13_05_11.gif)
 ### Praktikum 6 - StreamBuilder
 #### Soal 12
@@ -96,4 +101,16 @@ Berikut hasil dari praktikum 5:
 - Pada langkah 6, edit initState dengan menambahkan `getNumbers()`
 - Pada langkah 7, membuat `StreamBuilder` dengan `stream` dan `builder` yang digunakan untuk membangun widget.
 Berikut hasil dari praktikum 6:
+
 ![Praktikum 6](images/13_06_12.gif)
+### Praktikum 7 - BloC Pattern
+#### Soal 13
+##### Jelaskan maksud praktikum ini ! Dimanakah letak konsep pola BLoC-nya ?
+- Praktikum ini adalah untuk membuat aplikasi yang menghasilkan angka random dengan menggunakan BLoC Pattern.
+- Konsep pola BLoC terletak pada class `RandomNumberBloc` yang digunakan untuk mengatur stream controller dan sink.
+- Pada class `RandomNumberBloc` terdapat method `generateRandom` yang digunakan untuk menambahkan angka random ke dalam stream dan method `randomNumber` yang digunakan untuk mendapatkan angka random dari stream.
+- Kemudian pada constructor `RandomNumberBloc`, stream controller `generateRandomController` akan mendengarkan perubahan pada stream dan menambahkan angka random ke dalam stream controller `randomNumberController`.
+- Pada method `dispose`, stream controller akan di close.
+Berikut hasil dari praktikum 7:
+
+![Praktikum 7](images/13_07_13.gif)
