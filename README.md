@@ -55,3 +55,10 @@ Hasil dari praktikum 1 adalah sebagai berikut:
 - `initState` adalah method yang akan dipanggil ketika state dari widget diinisialisasi. Pada kode langkah 8, method `initState` digunakan untuk menginisialisasi stream controller dan sink.
 - Memanggil numberStream, numberStreamController, dan stream kemudian listen pada stream tersebut dengan `lastNumber` = event.
 - Untuk bagian langkah 10, membuat method addRandomNumber yang digunakan untuk menambahkan angka random ke dalam stream.
+Berikut hasil dari praktikum 2:
+![Praktikum 2](images/13_02_06.gif)
+#### Soal 7
+##### Jelaskan maksud kode langkah 13 sampai 15 tersebut!
+- Pada langkah 13, method `addError()` digunakan untuk menambahkan error ke dalam stream.
+- Pada langkah 14, menambahkan `onError` pada `initState()`.
+- Pada langkah 15, menambahkan `onError` pada `addRandomNumber()` digunakan sebagai pembacaan error.

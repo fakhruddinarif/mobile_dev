@@ -33,4 +33,8 @@ class NumberStream {
   close() {
     streamController.close();
   }
+
+  addError() {
+    streamController.sink.addError('Error');
+  }
 }
