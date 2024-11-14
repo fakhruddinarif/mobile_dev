@@ -71,3 +71,10 @@ Berikut hasil dari praktikum 2:
 Berikut hasil dari praktikum 3:
 ![Praktikum 3](images/13_03_08.gif)
 ### Praktikum 4 - Subscribe ke stream events
+#### Soal 9
+##### Jelaskan maksud kode dari langkah 2, 6, dan 8!
+- Pada langkah 2, membuat variabel `subscription` yang digunakan untuk mendengarkan perubahan pada stream.
+- Pada langkah 6, menambahkan `subscription.cancel()` pada `dispose()` untuk membatalkan subscription.
+- Pada langkah 8, edit method `addRandomNumber` dengan menambahkan pengecekan apakah subscription sudah dibatalkan atau belum.
+Berikut hasil dari praktikum 4:
+![Praktikum 4](images/13_04_09.gif)

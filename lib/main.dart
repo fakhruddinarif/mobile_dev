@@ -40,7 +40,9 @@ class _StreamHomePageState extends State<StreamHomePage> {
   late StreamController numberStreamController;
   late NumberStream numberStream;
 
-  late StreamTransformer transformer;
+  // late StreamTransformer transformer;
+
+  late StreamSubscription subscription;
 
   void changeColor() async {
     colorStream.getColors().listen((Color color) {
@@ -53,8 +55,20 @@ class _StreamHomePageState extends State<StreamHomePage> {
   void addRandomNumber() {
     Random random = Random();
     int randomNumber = random.nextInt(10);
-    numberStream.addNumberToSink(randomNumber);
+    // numberStream.addNumberToSink(randomNumber);
     // numberStream.addError();
+
+    if (!numberStreamController.isClosed) {
+      numberStreamController.sink.add(randomNumber);
+    } else {
+      setState(() {
+        lastNumber = -1;
+      });
+    }
+  }
+
+  void stopStream() {
+    numberStream.close();
   }
 
   @override
@@ -72,7 +86,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
       });
     });*/
 
-    transformer = StreamTransformer<int, int>.fromHandlers(
+    /*transformer = StreamTransformer<int, int>.fromHandlers(
       handleData: (value, sink) {
         sink.add(value * 10);
       },
@@ -80,9 +94,25 @@ class _StreamHomePageState extends State<StreamHomePage> {
         sink.add(-1);
       },
       handleDone: (sink) => sink.close(),
-    );
+    );*/
 
-    stream.transform(transformer).listen((event) {
+    subscription = stream.listen((event) {
+      setState(() {
+        lastNumber = event;
+      });
+    });
+
+    subscription.onError((error) {
+      setState(() {
+        lastNumber = -1;
+      });
+    });
+
+    subscription.onDone(() {
+      print('onDone was called');
+    });
+
+    /*stream.transform(transformer).listen((event) {
       setState(() {
         lastNumber = event;
       });
@@ -90,7 +120,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
       setState(() {
         lastNumber = -1;
       });
-    });
+    });*/
 
     super.initState();
   }
@@ -98,6 +128,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
   @override
   void dispose() {
     numberStream.close();
+    subscription.cancel();
     super.dispose();
   }
 
@@ -115,6 +146,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
           children: [
             Text(lastNumber.toString()),
             ElevatedButton(onPressed: () => addRandomNumber(), child: Text('New Random Number')),
+            ElevatedButton(onPressed: () => stopStream(), child: Text('Stop Subscription')),
           ],
         ),
       )
