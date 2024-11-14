@@ -44,6 +44,9 @@ class _StreamHomePageState extends State<StreamHomePage> {
 
   late StreamSubscription subscription;
 
+  late StreamSubscription secondSubscription;
+  String values = '';
+
   void changeColor() async {
     colorStream.getColors().listen((Color color) {
       setState(() {
@@ -75,7 +78,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
   void initState() {
     numberStream = NumberStream();
     numberStreamController = numberStream.streamController;
-    Stream stream = numberStreamController.stream;
+    Stream stream = numberStreamController.stream.asBroadcastStream();
     /*stream.listen((event) {
       setState(() {
         lastNumber = event;
@@ -96,7 +99,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
       handleDone: (sink) => sink.close(),
     );*/
 
-    subscription = stream.listen((event) {
+    /*subscription = stream.listen((event) {
       setState(() {
         lastNumber = event;
       });
@@ -110,7 +113,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
 
     subscription.onDone(() {
       print('onDone was called');
-    });
+    });*/
 
     /*stream.transform(transformer).listen((event) {
       setState(() {
@@ -121,6 +124,18 @@ class _StreamHomePageState extends State<StreamHomePage> {
         lastNumber = -1;
       });
     });*/
+
+    subscription = stream.listen((event) {
+      setState(() {
+        values += '$event - ';
+      });
+    });
+
+    secondSubscription = stream.listen((event) {
+      setState(() {
+        values += '$event - ';
+      });
+    });
 
     super.initState();
   }
@@ -144,7 +159,7 @@ class _StreamHomePageState extends State<StreamHomePage> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(lastNumber.toString()),
+            Text(values),
             ElevatedButton(onPressed: () => addRandomNumber(), child: Text('New Random Number')),
             ElevatedButton(onPressed: () => stopStream(), child: Text('Stop Subscription')),
           ],

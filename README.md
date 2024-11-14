@@ -78,3 +78,12 @@ Berikut hasil dari praktikum 3:
 - Pada langkah 8, edit method `addRandomNumber` dengan menambahkan pengecekan apakah subscription sudah dibatalkan atau belum.
 Berikut hasil dari praktikum 4:
 ![Praktikum 4](images/13_04_09.gif)
+### Praktikum 5 - Multiple stream subscriptions
+#### Soal 10
+##### Jelaskan mengapa error itu dapat terjadi?
+- Dapat terjadi dikarenakan ketika mencoba listen pada sebuah single-subscription stream lebih dari sekali. Single-subscription stream hanya dapat didengarkan oleh satu listener pada satu waktu. Jika Anda perlu mendengarkan stream yang sama oleh beberapa listener.
+#### Soal 11
+##### Jelaskan mengapa hal tersebut dapat terjadi?
+- Setelah menggunakan `asBroadcastStream()`, stream dapat didengarkan oleh beberapa listener. Dan mengapa ketika button `New Random Number` ditekan text bertambah dua kali, karena stream dapat didengarkan oleh beberapa listener.
+Berikut hasil dari praktikum 5:
+![Praktikum 5](images/13_05_11.gif)
