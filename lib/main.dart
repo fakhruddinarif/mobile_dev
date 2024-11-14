@@ -1,11 +1,12 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:async/async.dart';
 import 'package:mobile_dev/geolocation.dart';
 import 'package:mobile_dev/navigation_dialog.dart';
 import 'package:mobile_dev/navigation_first.dart';
-import 'package:mobile_dev/streams/color_stream.dart';
+import 'package:mobile_dev/streams/stream.dart';
 
 void main() => runApp(const MyApp());
 
@@ -35,6 +36,10 @@ class _StreamHomePageState extends State<StreamHomePage> {
   Color _color = Colors.blueGrey;
   late ColorStream colorStream;
 
+  int lastNumber = 0;
+  late StreamController numberStreamController;
+  late NumberStream numberStream;
+
   void changeColor() async {
     colorStream.getColors().listen((Color color) {
       setState(() {
@@ -43,11 +48,30 @@ class _StreamHomePageState extends State<StreamHomePage> {
     });
   }
 
+  void addRandomNumber() {
+    Random random = Random();
+    int randomNumber = random.nextInt(10);
+    numberStream.addNumberToSink(randomNumber);
+  }
+
   @override
   void initState() {
+    numberStream = NumberStream();
+    numberStreamController = numberStream.streamController;
+    Stream stream = numberStreamController.stream;
+    stream.listen((event) {
+      setState(() {
+        lastNumber = event;
+      });
+    });
+
     super.initState();
-    colorStream = ColorStream();
-    changeColor();
+  }
+
+  @override
+  void dispose() {
+    numberStream.close();
+    super.dispose();
   }
 
   @override
@@ -56,9 +80,17 @@ class _StreamHomePageState extends State<StreamHomePage> {
       appBar: AppBar(
         title: const Text('Stream - Muhammad Fakhruddin Arif'),
       ),
-      body: Container(
-        decoration: BoxDecoration(color: _color),
-      ),
+      body: SizedBox(
+        width: double.infinity,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(lastNumber.toString()),
+            ElevatedButton(onPressed: () => addRandomNumber(), child: Text('New Random Number')),
+          ],
+        ),
+      )
     );
   }
 }

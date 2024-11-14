@@ -49,3 +49,9 @@ Hasil dari praktikum 1 adalah sebagai berikut:
 - `listen` digunakan untuk mendengarkan perubahan pada stream. Ketika stream mengeluarkan nilai, maka nilai tersebut akan diambil dan diproses.
 - `await for` digunakan untuk menunggu stream mengeluarkan nilai. Ketika stream mengeluarkan nilai, maka nilai tersebut akan diambil dan diproses.
 - Perbedaan antara `listen` dan `await for` adalah pada cara pengambilan nilai dari stream. `listen` akan mengambil nilai dari stream ketika stream mengeluarkan nilai, sedangkan `await for` akan menunggu stream mengeluarkan nilai.
+### Praktikum 2 - Stream Controller dan Sinks
+#### Soal 6
+##### Jelaskan maksud kode langkah 8 dan 10 tersebut!
+- `initState` adalah method yang akan dipanggil ketika state dari widget diinisialisasi. Pada kode langkah 8, method `initState` digunakan untuk menginisialisasi stream controller dan sink.
+- Memanggil numberStream, numberStreamController, dan stream kemudian listen pada stream tersebut dengan `lastNumber` = event.
+- Untuk bagian langkah 10, membuat method addRandomNumber yang digunakan untuk menambahkan angka random ke dalam stream.
