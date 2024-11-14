@@ -41,3 +41,7 @@ class ColorStream {
 - Maksud dari kode tersebut adalah untuk mengembalikan nilai dari stream `colors` yang berisi list warna.
 - Setiap warna yang ada pada stream `colors` akan diambil satu per satu dan dikembalikan sebagai nilai stream.
 - Setelah semua warna pada stream `colors` diambil, maka stream akan selesai.
+#### Soal 4
+Hasil dari praktikum 1 adalah sebagai berikut:
+![Praktikum 1](images/13_01_04.gif)
+#### Soal 5

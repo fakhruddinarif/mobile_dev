@@ -1,11 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:async/async.dart';
 import 'package:mobile_dev/geolocation.dart';
 import 'package:mobile_dev/navigation_dialog.dart';
 import 'package:mobile_dev/navigation_first.dart';
+import 'package:mobile_dev/streams/color_stream.dart';
 
 void main() => runApp(const MyApp());
 
@@ -32,10 +32,34 @@ class StreamHomePage extends StatefulWidget {
 }
 
 class _StreamHomePageState extends State<StreamHomePage> {
+  Color _color = Colors.blueGrey;
+  late ColorStream colorStream;
+
+  void changeColor() async {
+    await for (var event in colorStream.getColors()) {
+      setState(() {
+        _color = event;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    colorStream = ColorStream();
+    changeColor();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Stream - Muhammad Fakhruddin Arif'),
+      ),
+      body: Container(
+        decoration: BoxDecoration(color: _color),
+      ),
+    );
   }
 }
 
