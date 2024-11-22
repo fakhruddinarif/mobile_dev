@@ -1,10 +1,5 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-import 'package:mobile_dev/models/pizza.dart';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() => runApp(const MyApp());
 
@@ -16,7 +11,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter JSON Demo - Muhammad Fakhruddin Arif',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepPurple,
       ),
       home: const MyHomePage(title: 'Flutter JSON Demo - Muhammad Fakhruddin Arif'),
     );
@@ -42,158 +37,48 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int appCounter = 0; // Practice 3
-  List<Pizza> pizzas = []; // Practice 1 and 2
+  final storage = const FlutterSecureStorage();
+  final key = 'password';
 
-  // Practice 4
-  String documentPath = '';
-  String tempPath = '';
-
-  // Practice 5
-  late File file;
-  String fileText = '';
+  final pwdController = TextEditingController();
+  String password = '';
 
   @override
   void initState() {
     super.initState();
-    // Practice 4 and 4
-    // getPaths();
-    getPaths().then((_) {
-      file = File('$documentPath/pizzas.txt');
-      writeFile();
-    });
-    // Practice 3
-    // readAndWritePreference();
-    // Practice 1 and 2
-    /*readJsonFile().then((value) {
-      setState(() {
-        pizzas = value;
-      });
-    });*/
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Path Provider - Muhammad Fakhruddin Arif'),
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Text('Document Path: $documentPath'),
-          Text('Temporary Path: $tempPath'),
-          ElevatedButton(onPressed: () => readFile(), child: const Text('Read File')),
-          Text(fileText),
-        ],
-      ),
-    );
-
-    // Practice 3
-    /*Container(
-        child: Center(
+      appBar: AppBar(title: const Text('Path Provider - Arif'),),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              Text('You have opened this app $appCounter times.'),
-              ElevatedButton(
-                onPressed: () {
-                  deletePreference();
-                },
-                child: const Text('Reset Counter'),
+            children: [
+              TextField(
+                controller: pwdController,
               ),
+              ElevatedButton(onPressed: () => writeToSecureStorage(), child: const Text('Save Value')),
+              ElevatedButton(onPressed: () => readFromSecureStorage().then((value) {
+                setState(() {
+                  password = value;
+                });
+              }), child: const Text('Read Value')),
+              Text(password)
             ],
           ),
         ),
       ),
-    );*/
-
-    //     Practice 1 and 2
-    /*Scaffold(
-      appBar: AppBar(
-        title: const Text('JSON - Muhammad Fakhruddin Arif'),
-      ),
-      body: ListView.builder(
-        itemCount: pizzas.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(pizzas[index].pizzaName),
-            subtitle: Text(pizzas[index].description),
-          );
-        },
-      ),
-    );*/
+    );
   }
 
-  // Practice 1 and 2
-  Future<List<Pizza>> readJsonFile() async {
-    String myString = await DefaultAssetBundle.of(context).loadString('assets/pizzalist.json');
-    List pizzaMap = jsonDecode(myString);
-    List<Pizza> pizzas = [];
-    for (var pizza in pizzaMap) {
-      Pizza p = Pizza.fromJson(pizza);
-      pizzas.add(p);
-    }
-    String json = convertToJson(pizzas);
-    print(json);
-    return pizzas;
+  Future writeToSecureStorage() async {
+    await storage.write(key: key, value: pwdController.text);
   }
 
-  String convertToJson(List<Pizza> pizzas) {
-    return jsonEncode(pizzas.map((pizza) => jsonEncode(pizza)).toList());
-  }
-
-  // Practice 3
-  Future readAndWritePreference() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    appCounter = prefs.getInt('appCounter') ?? 0;
-    appCounter++;
-    await prefs.setInt('appCounter', appCounter);
-
-    setState(() {
-      appCounter = appCounter;
-    });
-  }
-
-  Future deletePreference() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    setState(() {
-      appCounter = 0;
-    });
-  }
-
-  // Practice 4
-  Future getPaths() async {
-    final docDir = await getApplicationDocumentsDirectory();
-    final tempDir = await getTemporaryDirectory();
-
-    setState(() {
-      documentPath = docDir.path;
-      tempPath = tempDir.path;
-    });
-  }
-
-  // Practice 5
-  Future<bool> writeFile() async {
-    try {
-      await file.writeAsString('Margherita, Capricciosa, Napoli');
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  Future<bool> readFile() async {
-    try {
-      String fileContent = await file.readAsString();
-      setState(() {
-        fileText = fileContent;
-      });
-      return true;
-    }
-    catch (e) {
-      return false;
-    }
+  Future<String> readFromSecureStorage() async {
+    return await storage.read(key: key) ?? '';
   }
 }

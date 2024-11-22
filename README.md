@@ -331,3 +331,63 @@ Future<bool> readFile() async {
 ![image](images/14_05_01.png)
 
 ### Praktikum 6: Using secure storage to store data
+#### 1. Tambahkan dependensi flutter_secure_storage ke file pubspec.yaml
+![image](images/14_06_01.png)
+#### 2. Membuat Widget
+``` dart
+Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Path Provider - Arif'),),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: pwdController,
+              ),
+              ElevatedButton(onPressed: () {}, child: const Text('Save Value')),
+              ElevatedButton(onPressed: () {}, child: const Text('Read Value')),
+              Text(password)
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+```
+#### 3. Import flutter_secure_storage
+``` dart
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+```
+#### 4. Buat penyimpanan aman
+``` dart
+final storage = FlutterSecureStorage();
+final key = 'password';
+```
+#### 5. Tambahkan metode untuk menulis data ke penyimpanan aman
+``` dart
+Future writeToSecureStorage() async {
+    await storage.write(key: key, value: pwdController.text);
+}
+```
+#### 6. Tambahkan metode untuk menulis data ke penyimpanan aman
+``` dart
+ElevatedButton(onPressed: () => writeToSecureStorage(), child: const Text('Save Value')),
+```
+#### 7. Tambahkan metode untuk membaca data dari penyimpanan aman
+``` dart
+Future<String> readFromSecureStorage() async {
+    return await storage.read(key: key) ?? '';
+}
+```
+#### 8. Tambahkan metode untuk membaca data dari penyimpanan aman
+``` dart
+ElevatedButton(onPressed: () => readFromSecureStorage().then((value) {
+                setState(() {
+                  password = value;
+                });
+              }), child: const Text('Read Value')),
+```
+#### 9. Jalankan aplikasi dan coba simpan dan baca data
+![image](images/14_06_09.png)
