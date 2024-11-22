@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:math';
+import 'dart:convert';
+import 'dart:io';
+import 'package:mobile_dev/models/pizza.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:async/async.dart';
-import 'package:mobile_dev/geolocation.dart';
-import 'package:mobile_dev/navigation_dialog.dart';
-import 'package:mobile_dev/navigation_first.dart';
-import 'package:mobile_dev/streams/random_screen.dart';
-import 'package:mobile_dev/streams/stream.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() => runApp(const MyApp());
 
@@ -17,347 +14,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Stream - Muhammad Fakhruddin Arif',
+      title: 'Flutter JSON Demo - Muhammad Fakhruddin Arif',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: RandomScreen(),
+      home: const MyHomePage(title: 'Flutter JSON Demo - Muhammad Fakhruddin Arif'),
     );
-  }
-}
-
-class StreamHomePage extends StatefulWidget {
-  const StreamHomePage({Key? key}) : super(key: key);
-
-  @override
-  _StreamHomePageState createState() => _StreamHomePageState();
-}
-
-class _StreamHomePageState extends State<StreamHomePage> {
-  /*Color _color = Colors.blueGrey;
-  late ColorStream colorStream;
-
-  int lastNumber = 0;
-  late StreamController numberStreamController;
-  late NumberStream numberStream;
-
-  // late StreamTransformer transformer;
-
-  late StreamSubscription subscription;
-
-  late StreamSubscription secondSubscription;
-  String values = '';
-
-  void changeColor() async {
-    colorStream.getColors().listen((Color color) {
-      setState(() {
-        _color = color;
-      });
-    });
-  }
-
-  void addRandomNumber() {
-    Random random = Random();
-    int randomNumber = random.nextInt(10);
-    // numberStream.addNumberToSink(randomNumber);
-    // numberStream.addError();
-
-    if (!numberStreamController.isClosed) {
-      numberStreamController.sink.add(randomNumber);
-    } else {
-      setState(() {
-        lastNumber = -1;
-      });
-    }
-  }
-
-  void stopStream() {
-    numberStream.close();
-  }
-
-  @override
-  void initState() {
-    numberStream = NumberStream();
-    numberStreamController = numberStream.streamController;
-    Stream stream = numberStreamController.stream.asBroadcastStream();
-    *//*stream.listen((event) {
-      setState(() {
-        lastNumber = event;
-      });
-    }).onError((error) {
-      setState(() {
-        lastNumber = -1;
-      });
-    });*//*
-
-    *//*transformer = StreamTransformer<int, int>.fromHandlers(
-      handleData: (value, sink) {
-        sink.add(value * 10);
-      },
-      handleError: (error, trace, sink) {
-        sink.add(-1);
-      },
-      handleDone: (sink) => sink.close(),
-    );*//*
-
-    *//*subscription = stream.listen((event) {
-      setState(() {
-        lastNumber = event;
-      });
-    });
-
-    subscription.onError((error) {
-      setState(() {
-        lastNumber = -1;
-      });
-    });
-
-    subscription.onDone(() {
-      print('onDone was called');
-    });*//*
-
-    *//*stream.transform(transformer).listen((event) {
-      setState(() {
-        lastNumber = event;
-      });
-    }).onError((error) {
-      setState(() {
-        lastNumber = -1;
-      });
-    });*//*
-
-    subscription = stream.listen((event) {
-      setState(() {
-        values += '$event - ';
-      });
-    });
-
-    secondSubscription = stream.listen((event) {
-      setState(() {
-        values += '$event - ';
-      });
-    });
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    numberStream.close();
-    subscription.cancel();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Stream - Muhammad Fakhruddin Arif'),
-      ),
-      body: SizedBox(
-        width: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(values),
-            ElevatedButton(onPressed: () => addRandomNumber(), child: Text('New Random Number')),
-            ElevatedButton(onPressed: () => stopStream(), child: Text('Stop Subscription')),
-          ],
-        ),
-      )
-    );
-  }*/
-
-  late Stream<int> numberStream;
-
-  @override
-  void initState() {
-    super.initState();
-    numberStream = NumberStream().getNumbers();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Stream - Muhammad Fakhruddin Arif'),
-      ),
-      body: StreamBuilder(
-          stream: numberStream,
-         builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              print("Error");
-            }
-            if (snapshot.hasData) {
-              return Center(
-                child: Text(snapshot.data.toString(), style: const TextStyle(fontSize: 96),
-              ));
-            }
-            else {
-              return SizedBox.shrink();
-           }
-          }
-      ),
-    );
-  }
-}
-
-class FuturePage extends StatefulWidget {
-  const FuturePage({Key? key}) : super(key: key);
-
-  @override
-  _FuturePageState createState() => _FuturePageState();
-}
-
-class _FuturePageState extends State<FuturePage> {
-  String result = '';
-  late Completer completer;
-
-  void returnFG() {
-    // FutureGroup<int> futureGroup = FutureGroup<int>();
-    // futureGroup.add(returnOneAsync());
-    // futureGroup.add(returnTwoAsync());
-    // futureGroup.add(returnThreeAsync());
-    // futureGroup.close();
-    final futures = Future.wait<int>([
-      returnOneAsync(),
-      returnTwoAsync(),
-      returnThreeAsync(),
-    ]);
-    futures.then((List <int> value) {
-      int total = 0;
-      for (var element in value) {
-        total += element;
-
-      }
-      setState(() {
-        result = total.toString();
-      });
-    });
-  }
-
-  Future returnError() async {
-    await Future.delayed(const Duration(seconds: 2));
-    throw Exception('Something terrible happened!');
-  }
-
-  Future getNumber() {
-    completer = Completer<int>();
-    calculate2();
-    return completer.future;
-  }
-
-  Future calculate() async {
-    await Future.delayed(const Duration(seconds : 5));
-    completer.complete(42);
-  }
-
-  Future calculate2() async {
-    try {
-      await Future.delayed(const Duration(seconds: 5));
-      completer.complete(42);
-    } catch (_) {
-      completer.completeError({});
-    }
-  }
-
-  Future handleError() async {
-    try {
-      await returnError();
-    } catch (error) {
-      setState(() {
-        result = error.toString();
-      });
-    }
-    finally {
-      print('Complete');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Back from the Future'),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            const Spacer(),
-            ElevatedButton(
-                onPressed: () {
-                  /*setState(() {});
-                  getData().then((value) {
-                    result = value.body.toString().substring(0, 450);
-                    setState(() {});
-                  }).catchError((_) {
-                    result = 'An error occurred';
-                    setState(() {});
-                  });*/
-                  // count();
-                  /*getNumber().then((value) {
-                    setState(() {
-                      result = value.toString();
-                    });
-                  }).catchError((e) {
-                    result = 'An error occurred';
-                  });*/
-                  // returnFG();
-                  // returnError().then((value) {
-                  //   setState(() {
-                  //     result = "Success";
-                  //   });
-                  // }).catchError((e) {
-                  //   setState(() {
-                  //     result = e.toString();
-                  //   });
-                  // }).whenComplete(() {
-                  //   print('Complete');
-                  // });
-                  handleError();
-                },
-                child: const Text('Go')),
-            const Spacer(),
-            Text(result),
-            const Spacer(),
-            const CircularProgressIndicator(),
-            const Spacer(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Future<Response> getData() async {
-    const authority = 'www.googleapis.com';
-    const path = '/books/v1/volumes/1bm0DwAAQBAJ';
-    return get(Uri.https(authority, path));
-  }
-
-  Future<int> returnOneAsync() async {
-    await Future.delayed(const Duration(seconds: 3));
-    return 1;
-  }
-
-  Future<int> returnTwoAsync() async {
-    await Future.delayed(const Duration(seconds: 3));
-    return 2;
-  }
-
-  Future<int> returnThreeAsync() async {
-    await Future.delayed(const Duration(seconds: 3));
-    return 3;
-  }
-
-  Future count() async {
-    int total = 0;
-    total += await returnOneAsync();
-    total += await returnTwoAsync();
-    total += await returnThreeAsync();
-    setState(() {
-      result = total.toString();
-    });
   }
 }
 
@@ -380,71 +42,158 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  int appCounter = 0; // Practice 3
+  List<Pizza> pizzas = []; // Practice 1 and 2
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+  // Practice 4
+  String documentPath = '';
+  String tempPath = '';
+
+  // Practice 5
+  late File file;
+  String fileText = '';
+
+  @override
+  void initState() {
+    super.initState();
+    // Practice 4 and 4
+    // getPaths();
+    getPaths().then((_) {
+      file = File('$documentPath/pizzas.txt');
+      writeFile();
     });
+    // Practice 3
+    // readAndWritePreference();
+    // Practice 1 and 2
+    /*readJsonFile().then((value) {
+      setState(() {
+        pizzas = value;
+      });
+    });*/
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        title: Text('Path Provider - Muhammad Fakhruddin Arif'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Text('Document Path: $documentPath'),
+          Text('Temporary Path: $tempPath'),
+          ElevatedButton(onPressed: () => readFile(), child: const Text('Read File')),
+          Text(fileText),
+        ],
+      ),
+    );
+
+    // Practice 3
+    /*Container(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Text('You have opened this app $appCounter times.'),
+              ElevatedButton(
+                onPressed: () {
+                  deletePreference();
+                },
+                child: const Text('Reset Counter'),
+              ),
+            ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+    );*/
+
+    //     Practice 1 and 2
+    /*Scaffold(
+      appBar: AppBar(
+        title: const Text('JSON - Muhammad Fakhruddin Arif'),
+      ),
+      body: ListView.builder(
+        itemCount: pizzas.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: Text(pizzas[index].pizzaName),
+            subtitle: Text(pizzas[index].description),
+          );
+        },
+      ),
+    );*/
+  }
+
+  // Practice 1 and 2
+  Future<List<Pizza>> readJsonFile() async {
+    String myString = await DefaultAssetBundle.of(context).loadString('assets/pizzalist.json');
+    List pizzaMap = jsonDecode(myString);
+    List<Pizza> pizzas = [];
+    for (var pizza in pizzaMap) {
+      Pizza p = Pizza.fromJson(pizza);
+      pizzas.add(p);
+    }
+    String json = convertToJson(pizzas);
+    print(json);
+    return pizzas;
+  }
+
+  String convertToJson(List<Pizza> pizzas) {
+    return jsonEncode(pizzas.map((pizza) => jsonEncode(pizza)).toList());
+  }
+
+  // Practice 3
+  Future readAndWritePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    appCounter = prefs.getInt('appCounter') ?? 0;
+    appCounter++;
+    await prefs.setInt('appCounter', appCounter);
+
+    setState(() {
+      appCounter = appCounter;
+    });
+  }
+
+  Future deletePreference() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
+    setState(() {
+      appCounter = 0;
+    });
+  }
+
+  // Practice 4
+  Future getPaths() async {
+    final docDir = await getApplicationDocumentsDirectory();
+    final tempDir = await getTemporaryDirectory();
+
+    setState(() {
+      documentPath = docDir.path;
+      tempPath = tempDir.path;
+    });
+  }
+
+  // Practice 5
+  Future<bool> writeFile() async {
+    try {
+      await file.writeAsString('Margherita, Capricciosa, Napoli');
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  Future<bool> readFile() async {
+    try {
+      String fileContent = await file.readAsString();
+      setState(() {
+        fileText = fileContent;
+      });
+      return true;
+    }
+    catch (e) {
+      return false;
+    }
   }
 }
