@@ -3,7 +3,9 @@ import 'package:mobile_dev/httphelper.dart';
 import 'package:mobile_dev/models/pizza.dart';
 
 class PizzaDetailScreen extends StatefulWidget {
-  const PizzaDetailScreen({Key? key}) : super(key: key);
+  final Pizza pizza;
+  final bool isNew;
+  const PizzaDetailScreen({Key? key, required this.pizza, required this.isNew}) : super(key: key);
 
   @override
   _PizzaDetailScreenState createState() => _PizzaDetailScreenState();
@@ -17,6 +19,18 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
   final TextEditingController _txtImageUrl = TextEditingController();
 
   String operationResult = '';
+
+  @override
+  void initState() {
+    if (!widget.isNew) {
+      _txtId.text = widget.pizza.id.toString();
+      _txtName.text = widget.pizza.pizzaName;
+      _txtDescription.text = widget.pizza.description;
+      _txtPrice.text = widget.pizza.price.toString();
+      _txtImageUrl.text = widget.pizza.imageUrl;
+    }
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -49,7 +63,7 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                   onPressed: () {
-                    postPizza();
+                    savePizza();
                   },
                   child: const Text('Send Post')
               )
@@ -70,6 +84,21 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
       imageUrl: _txtImageUrl.text,
     );
     String result = await helper.postPizza(pizza);
+    setState(() {
+      operationResult = result;
+    });
+  }
+
+  Future savePizza() async {
+    HttpHelper helper = HttpHelper();
+    Pizza pizza = Pizza(
+      id: int.parse(_txtId.text),
+      pizzaName: _txtName.text,
+      description: _txtDescription.text,
+      price: double.parse(_txtPrice.text),
+      imageUrl: _txtImageUrl.text,
+    );
+    final result = await (widget.isNew ? helper.postPizza(pizza) : helper.putPizza(pizza));
     setState(() {
       operationResult = result;
     });

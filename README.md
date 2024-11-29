@@ -214,7 +214,7 @@ class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
 }
 ```
 #### 3. Tambah floating action button pada main.dart
-```dart
+``` dart
 floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
           onPressed: () {
@@ -229,3 +229,189 @@ floatingActionButton: FloatingActionButton(
 ![3](images/W14_02.png)
 
 ### Praktikum 3: PUT-ing Data
+
+#### 1. Metode putPizza() pada httphelper.dart
+```dart
+Future<String> putPizza(Pizza pizza) async {
+    String path = '/pizza';
+    String body = json.encode(pizza.toJson());
+    Uri url = Uri.https(authority, path);
+    http.Response response = await http.put(url, body: body);
+    return response.body;
+  }
+```
+#### 2. Edit PizzaDetailScreen
+```dart
+import 'package:flutter/material.dart';
+import 'package:mobile_dev/httphelper.dart';
+import 'package:mobile_dev/models/pizza.dart';
+
+class PizzaDetailScreen extends StatefulWidget {
+  final Pizza pizza;
+  final bool isNew;
+  const PizzaDetailScreen({Key? key, required this.pizza, required this.isNew}) : super(key: key);
+
+  @override
+  _PizzaDetailScreenState createState() => _PizzaDetailScreenState();
+}
+
+class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
+  final TextEditingController _txtId = TextEditingController();
+  final TextEditingController _txtName = TextEditingController();
+  final TextEditingController _txtDescription = TextEditingController();
+  final TextEditingController _txtPrice = TextEditingController();
+  final TextEditingController _txtImageUrl = TextEditingController();
+
+  String operationResult = '';
+
+  @override
+  void initState() {
+    if (!widget.isNew) {
+      _txtId.text = widget.pizza.id.toString();
+      _txtName.text = widget.pizza.pizzaName;
+      _txtDescription.text = widget.pizza.description;
+      _txtPrice.text = widget.pizza.price.toString();
+      _txtImageUrl.text = widget.pizza.imageUrl;
+    }
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _txtId.dispose();
+    _txtName.dispose();
+    _txtDescription.dispose();
+    _txtPrice.dispose();
+    _txtImageUrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Pizza Detail'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text(operationResult, style: TextStyle(backgroundColor: Colors.green[200], color: Colors.black),),
+              const SizedBox(height: 24),
+              _textField('Insert ID', _txtId),
+              _textField('Insert Pizza Name', _txtName),
+              _textField('Insert Description', _txtDescription),
+              _textField('Insert Price', _txtPrice),
+              _textField('Insert Image URL', _txtImageUrl),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                  onPressed: () {
+                    postPizza();
+                  },
+                  child: const Text('Send Post')
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future postPizza() async {
+    HttpHelper helper = HttpHelper();
+    Pizza pizza = Pizza(
+      id: int.parse(_txtId.text),
+      pizzaName: _txtName.text,
+      description: _txtDescription.text,
+      price: double.parse(_txtPrice.text),
+      imageUrl: _txtImageUrl.text,
+    );
+    String result = await helper.postPizza(pizza);
+    setState(() {
+      operationResult = result;
+    });
+  }
+
+  Future savePizza() async {
+    HttpHelper helper = HttpHelper();
+    Pizza pizza = Pizza(
+      id: int.parse(_txtId.text),
+      pizzaName: _txtName.text,
+      description: _txtDescription.text,
+      price: double.parse(_txtPrice.text),
+      imageUrl: _txtImageUrl.text,
+    );
+    final result = await (widget.isNew ? helper.postPizza(pizza) : helper.putPizza(pizza));
+    setState(() {
+      operationResult = result;
+    });
+  }
+
+  Column _textField(String label, TextEditingController controller) {
+    return Column(
+      children: [
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: label,
+          ),
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
+}
+```
+#### 3. Menjalankan Aplikasi
+![4](images/W14_03.png)
+
+### Praktikum 4: DELETE-ing Data
+#### 1. Metode deletePizza() pada httphelper.dart
+```dart
+Future<String> deletePizza(int id) async {
+    String path = '/pizza';
+    Uri url = Uri.https(authority, path);
+    http.Response response = await http.delete(url);
+    return response.body;
+  }
+```
+#### 2. Edit _MyHomePageState pada main.dart
+``` dart
+FutureBuilder(
+          future: callPizzas(),
+          builder: (BuildContext context, AsyncSnapshot<List<Pizza>> snapshot) {
+            if (snapshot.hasError) {
+              return const Text('Something went wrong');
+            }
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return ListView.builder(
+              itemCount: (snapshot.data == null) ? 0 : snapshot.data!.length,
+              itemBuilder: (BuildContext context, int index) {
+                return Dismissible(
+                    key: Key(index.toString()),
+                    onDismissed: (direction) {
+                      HttpHelper httpHelper = HttpHelper();
+                      snapshot.data!.removeWhere((element) => element.id == snapshot.data![index].id);
+                      httpHelper.deletePizza(snapshot.data![index].id);
+                    },
+                    child: ListTile(
+                      title: Text(snapshot.data![index].pizzaName),
+                      subtitle: Text(snapshot.data![index].description + ' - €' + snapshot.data![index].price.toString()),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PizzaDetailScreen(pizza: snapshot.data![index], isNew: false)),
+                        );
+                      },
+                    )
+                );
+              },
+            );
+          },
+      ),
+```
+#### 3. Menjalankan Aplikasi
+![5](images/W14_04.gif)

@@ -83,9 +83,23 @@ class _MyHomePageState extends State<MyHomePage> {
             return ListView.builder(
               itemCount: (snapshot.data == null) ? 0 : snapshot.data!.length,
               itemBuilder: (BuildContext context, int index) {
-                return ListTile(
-                  title: Text(snapshot.data![index].pizzaName),
-                  subtitle: Text(snapshot.data![index].description + ' - €' + snapshot.data![index].price.toString()),
+                return Dismissible(
+                    key: Key(index.toString()),
+                    onDismissed: (direction) {
+                      HttpHelper httpHelper = HttpHelper();
+                      snapshot.data!.removeWhere((element) => element.id == snapshot.data![index].id);
+                      httpHelper.deletePizza(snapshot.data![index].id);
+                    },
+                    child: ListTile(
+                      title: Text(snapshot.data![index].pizzaName),
+                      subtitle: Text(snapshot.data![index].description + ' - €' + snapshot.data![index].price.toString()),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PizzaDetailScreen(pizza: snapshot.data![index], isNew: false)),
+                        );
+                      },
+                    )
                 );
               },
             );
@@ -96,7 +110,10 @@ class _MyHomePageState extends State<MyHomePage> {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PizzaDetailScreen()),
+              MaterialPageRoute(builder: (context) => PizzaDetailScreen(
+                pizza: Pizza(id: 0, pizzaName: '', description: '', price: 0.0, imageUrl: ''),
+                isNew: true,
+              )),
             );
           }
       ),// This trailing comma makes auto-formatting nicer for build methods.
