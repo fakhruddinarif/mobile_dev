@@ -3,391 +3,229 @@ Nama   : Muhammad Fakhruddin Arif
 NIM    : 2241720030
 Kelas  : TI-3C
 ```
-### Praktikum 1: Converting Dart models into JSON
-#### 1. Di dalam folder aset, buat file baru bernama pizzalist.json dan salin konten yang tersedia di tautan https://gist.github.com/simoales/a33c1c2abe78b48a75ccfd5fa0de0620. File ini berisi daftar objek JSON.
-![image](images/14_01_01.png)
-#### 2. Di file pubspec.yaml, tambahkan referensi ke folder aset baru, seperti yang ditunjukkan di sini:
-![image](images/14_01_02.png)
-#### 3. Pada kelas _MyHomePageState, di main.dart, tambahkan sebuah variabel state bernama pizzaString:
-``` dart
-class _MyHomePageState extends State<MyHomePage> {
-  String pizzaString = '';
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('JSON - Muhammad Fakhruddin Arif'),
-      ),
-      body: Container(),
-    );
-  }
-}
-```
-#### 4. Untuk membaca isi file pizzalist.json, di bagian bawah kelas _MyHomePageState di main.dart, tambahkan metode asinkron baru yang disebut readJsonFile, yang akan mengatur nilai pizzaString, seperti yang ditunjukkan di sini:
-``` dart
-class _MyHomePageState extends State<MyHomePage> {
-  String pizzaString = '';
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('JSON - Muhammad Fakhruddin Arif'),
-      ),
-      body: Container(),
-    );
-  }
-  Future readJsonFile() async {
-    String myString = await DefaultAssetBundle.of(context).loadString('assets/pizzalist.json');
-    setState(() {
-      pizzaString = myString;
-    });
-  }
-}
-```
-#### 5. Pada kelas _MyHomePageState, timpa metode initState dan, di dalamnya, panggil metode readJsonFile:
-``` dart
-class _MyHomePageState extends State<MyHomePage> {
-  String pizzaString = '';
-  
-  @override
-  void initState() {
-    super.initState();
-    readJsonFile();
-  }
-  
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('JSON - Muhammad Fakhruddin Arif'),
-      ),
-      body: Container(),
-    );
-  }
-  Future readJsonFile() async {
-    String myString = await DefaultAssetBundle.of(context).loadString('assets/pizzalist.json');
-    setState(() {
-      pizzaString = myString;
-    });
-  }
-}
-```
-#### 6. Sekarang, kita ingin menampilkan JSON yang diambil di properti dalam Scaffold. Untuk melakukannya, tambahkan widget Teks sebagai child dari Container kita:
-``` dart
-class _MyHomePageState extends State<MyHomePage> {
-  String pizzaString = '';
-
-  @override
-  void initState() {
-    super.initState();
-    readJsonFile();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('JSON - Muhammad Fakhruddin Arif'),
-      ),
-      body: Text(pizzaString),
-    );
-  }
-
-  Future readJsonFile() async {
-    String myString = await DefaultAssetBundle.of(context).loadString('assets/pizzalist.json');
-    setState(() {
-      pizzaString = myString;
-    });
-  }
-}
-```
-#### 7. Mari kita jalankan aplikasinya. Jika semuanya berjalan seperti yang diharapkan, Anda akan melihat konten file JSON di layar
-![image](images/14_01_07.png)
-#### 8. Kita ingin mengubah String ini menjadi sebuah List of Objects. Kita akan mulai dengan membuat kelas baru. Dalam folder lib aplikasi kita, buat file baru bernama pizza.dart.
-``` dart
-class Pizza {
-
-}
-```
-#### 9. Di dalam file tersebut, tentukan properti kelas Pizza:
-``` dart
-class Pizza {
-  final int id;
-  final String pizzaName;
-  final String description;
-  final double price;
-  final String imageUrl;
-}
-```
-#### 10. Di dalam kelas Pizza, tentukan konstruktor bernama fromJson, yang akan mengambil sebuah Map sebagai parameter dan mengubah Map menjadi sebuah instance dari Pizza:
-``` dart
-class Pizza {
-  final int id;
-  final String pizzaName;
-  final String description;
-  final double price;
-  final String imageUrl;
-
-  Pizza.fromJson(Map<String, dynamic> json)
-      : id = json['id'],
-        pizzaName = json['pizzaName'],
-        description = json['description'],
-        price = json['price'],
-        imageUrl = json['imageUrl'];
-}
-```
-#### 11. Refaktor metode readJsonFile() pada kelas _MyHomePageState. Langkah pertama adalah mengubah String menjadi Map dengan memanggil metode jsonDecode. Pada method readJsonFile, tambahkan kode yang di cetak tebal berikut ini:
-``` dart
-Future readJsonFile() async {
-   String myString = await DefaultAssetBundle.of(context).loadString('assets/pizzalist.json');
-   List pizza = jsonDecode(myString);
-   setState(() {
-     pizzaString = pizza.toString();
-   });
-}
-```
-#### 12. Pastikan editor Anda secara otomatis menambahkan pernyataan impor untuk pustaka "dart:convert" di bagian atas file main.dart; jika tidak, tambahkan saja secara manual. Tambahkan juga pernyataan impor untuk kelas pizza:
-``` dart
+### Praktikum 1: Designing an HTTP client and getting data
+#### 1. Install package http
+![1](images/W14_01_01.png)
+#### 2. Buat file httphelper.dart
+```dart
 import 'dart:convert';
+import 'dart:io';
+
 import 'package:mobile_dev/models/pizza.dart';
-```
-#### 13. Langkah terakhir adalah mengonversi string JSON kita menjadi List of native Dart objects. Kita dapat melakukan ini dengan mengulang pizzaMapList dan mengubahnya menjadi objek Pizza. Di dalam metode readJsonFile, di bawah metode jsonDecode, tambahkan kode berikut:
-``` dart
-Future readJsonFile() async {
-  String myString = await DefaultAssetBundle.of(context).loadString('assets/pizzalist.json');
-  List pizzaMap = jsonDecode(myString);
-  List<Pizza> pizzas = [];
-  for (var pizza in pizzaMap) {
-    Pizza p = Pizza.fromJson(pizza);
-    pizzas.add(p);
+import 'package:http/http.dart' as http;
+
+class HttpHelper {
+  final String authority = 'https://6r4zr.wiremockapi.cloud/';
+  final String path = 'pizzalist';
+
+  Future<List<Pizza>> getPizzaList() async {
+    final Uri url = Uri.https(authority, path);
+    final http.Response response = await http.get(url);
+    if (response.statusCode == HttpStatus.ok) {
+      final jsonResponse = json.decode(response.body);
+      List<Pizza> pizzas = jsonResponse.map<Pizza>((json) => Pizza.fromJson(json)).toList();
+      return pizzas;
+    } else {
+      return [];
+    }
   }
 }
 ```
-#### 14. Tambahkan kode berikut ini di dalam Scaffold, di dalam metode build()
+
+#### 3. Buat metode callPizzas() pada main.dart
+```dart
+Future<List<Pizza>> callPizzas() async {
+    HttpHelper httpHelper = HttpHelper();
+    List<Pizza> pizzas = await httpHelper.getPizzaList();
+    return pizzas;
+  }
+```
+#### 4. Buat FutureBuilder pada main.dart
 ``` dart
 class _MyHomePageState extends State<MyHomePage> {
-  List<Pizza> pizzas = [];
+  int _counter = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    readJsonFile().then((value) {
-      setState(() {
-        pizzas = value;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('JSON - Muhammad Fakhruddin Arif'),
-      ),
-      body: ListView.builder(
-        itemCount: pizzas.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(pizzas[index].pizzaName),
-            subtitle: Text(pizzas[index].description),
-          );
-        },
-      ),
-    );
-  }
-
-  Future<List<Pizza>> readJsonFile() async {
-    String myString = await DefaultAssetBundle.of(context).loadString('assets/pizzalist.json');
-    List pizzaMap = jsonDecode(myString);
-    List<Pizza> pizzas = [];
-    for (var pizza in pizzaMap) {
-      Pizza p = Pizza.fromJson(pizza);
-      pizzas.add(p);
-    }
-    return pizzas;
-  }
-}
-```
-#### 15. Jalankan aplikasi. Antarmuka pengguna sekarang seharusnya jauh lebih ramah dan terlihat seperti yang ditunjukkan pada
-![image](images/14_01_15.png)
-
-### Praktikum 2: Reading the JSON file
-#### 1. Tambahkan metode baru ke kelas Pizza, di file pizza.dart, yang disebut toJson. Ini akan mengembalikan sebuah Map<String, dynamic> dari objek
-``` dart
-Map<String, dynamic> toJson() => {
-    'id': id,
-    'pizzaName': pizzaName,
-    'description': description,
-    'price': price,
-    'imageUrl': imageUrl,
-  };
-```
-#### 2. Di dalam kelas _MyHomePageState, di main.dart, tambahkan metode baru yang disebut convertToJson
-``` dart
-String convertToJson(List<Pizza> pizzas) {
-  return jsonEncode(pizzas.map((pizza) => jsonEncode(pizza)).toList());
-}
-```
-#### 3. Panggil metode tersebut dan cetak string JSON di Debug Console. Tambahkan kode berikut ke metode readJsonFile, tepat sebelum mengembalikan List myPizzas
-``` dart
-Future<List<Pizza>> readJsonFile() async {
-    String myString = await DefaultAssetBundle.of(context).loadString('assets/pizzalist.json');
-    List pizzaMap = jsonDecode(myString);
-    List<Pizza> pizzas = [];
-    for (var pizza in pizzaMap) {
-      Pizza p = Pizza.fromJson(pizza);
-      pizzas.add(p);
-    }
-    String json = convertToJson(pizzas);
-    print(json);
-    return pizzas;
-  }
-```
-#### 4. Jalankan aplikasi. Di Debug Console, Anda akan melihat string JSON yang dihasilkan
-![image](images/14_02_05.png)
-
-### Praktikum 3: Saving data simply with SharedPreferences
-#### Hasil Sebelum Restart
-![image](images/14_03_01.png)
-#### Hasi Setelah Restart
-![image](images/14_03_02.png)
-
-### Praktikum 4: Accessing the filesystem, part 1: path_provider
-#### 1. Tambahkan dependensi path_provider ke file pubspec.yaml
-![image](images/14_04_02.png)
-#### 2. Tambahkan metode untuk mengambil direktori temporary dan dokumen
-``` dart
-Future getPaths() async {
-    final docDir = await getApplicationDocumentsDirectory();
-    final tempDir = await getTemporaryDirectory();
-
+  void _incrementCounter() {
     setState(() {
-      documentPath = docDir.path;
-      tempPath = tempDir.path;
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
     });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
+    return Scaffold(
+      appBar: AppBar(
+        // TRY THIS: Try changing the color here to a specific color (to
+        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // change color while the other colors stay the same.
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
+      ),
+      body: FutureBuilder(
+          future: callPizzas(),
+          builder: (BuildContext context, AsyncSnapshot<List<Pizza>> snapshot) {
+            if (snapshot.hasError) {
+              return const Text('Something went wrong');
+            }
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return ListView.builder(
+              itemCount: (snapshot.data == null) ? 0 : snapshot.data!.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  title: Text(snapshot.data![index].pizzaName),
+                  subtitle: Text(snapshot.data![index].description + ' - €' + snapshot.data![index].price.toString()),
+                );
+              },
+            );
+          },
+      ) // This trailing comma makes auto-formatting nicer for build methods.
+    );
+  }
+
+  Future<List<Pizza>> callPizzas() async {
+    HttpHelper httpHelper = HttpHelper();
+    List<Pizza> pizzas = await httpHelper.getPizzaList();
+    return pizzas;
+  }
 }
 ```
-#### 3. Hasil Setelah dijalankan
-![image](images/14_04_01.png)
 
-### Praktikum 5: Accessing the filesystem, part 2: reading and writing files
-#### 1. Buat metode baru bernama writeFile dan gunakan kelas File dari pustaka dart:io untuk membuat file baru:
-``` dart
-Future<bool> writeFile() async {
-    try {
-      await file.writeAsString('Margherita, Capricciosa, Napoli');
-      return true;
-    } catch (e) {
-      return false;
-    }
+#### 5. Menjalankan Aplikasi
+![2](images/W14_01.png)
+
+### Praktikum 2: POST-ing Data
+#### 1. Metode postPizza() pada httphelper.dart
+```dart
+Future<String> postPizza(Pizza pizza) async {
+    const String path = '/pizza';
+    String body = json.encode(pizza.toJson());
+    Uri url = Uri.https(authority, path);
+    http.Response response = await http.post(url, body: body);
+    return response.body;
   }
 ```
-#### 2. Dalam metode initState, setelah memanggil metode getPaths, dalam metode then, buat sebuah file dan panggil metode writeFile:
-``` dart 
-void initState() {
-    super.initState();
-    getPaths().then((_) {
-      file = File('$documentPath/pizzas.txt');
-      writeFile();
-    });
+#### 2. Buat file pizza detail.dart
+```dart
+import 'package:flutter/material.dart';
+import 'package:mobile_dev/httphelper.dart';
+import 'package:mobile_dev/models/pizza.dart';
+
+class PizzaDetailScreen extends StatefulWidget {
+  const PizzaDetailScreen({Key? key}) : super(key: key);
+
+  @override
+  _PizzaDetailScreenState createState() => _PizzaDetailScreenState();
+}
+
+class _PizzaDetailScreenState extends State<PizzaDetailScreen> {
+  final TextEditingController _txtId = TextEditingController();
+  final TextEditingController _txtName = TextEditingController();
+  final TextEditingController _txtDescription = TextEditingController();
+  final TextEditingController _txtPrice = TextEditingController();
+  final TextEditingController _txtImageUrl = TextEditingController();
+
+  String operationResult = '';
+
+  @override
+  void dispose() {
+    _txtId.dispose();
+    _txtName.dispose();
+    _txtDescription.dispose();
+    _txtPrice.dispose();
+    _txtImageUrl.dispose();
+    super.dispose();
   }
-```
-#### 3. Buat metode untuk membaca file
-``` dart
-Future<bool> readFile() async {
-    try {
-      String fileContent = await file.readAsString();
-      setState(() {
-        fileText = fileContent;
-      });
-      return true;
-    }
-    catch (e) {
-      return false;
-    }
-  }
-```
-#### 4. Dalam metode build, di widget Column, perbarui antarmuka pengguna dengan ElevatedButton. Ketika pengguna menekan tombol, tombol akan mencoba membaca konten file dan menampilkannya di layar, cek kode cetak tebal:
-``` dart
-@override
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Path Provider - Muhammad Fakhruddin Arif'),
+        title: const Text('Pizza Detail'),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Text('Document Path: $documentPath'),
-          Text('Temporary Path: $tempPath'),
-          ElevatedButton(onPressed: () => readFile(), child: const Text('Read File')),
-          Text(fileText),
-        ],
-      ),
-    );
-  }
-```
-#### 5. Jalankan aplikasi dan tekan tombol Baca File.
-![image](images/14_05_01.png)
-
-### Praktikum 6: Using secure storage to store data
-#### 1. Tambahkan dependensi flutter_secure_storage ke file pubspec.yaml
-![image](images/14_06_01.png)
-#### 2. Membuat Widget
-``` dart
-Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Path Provider - Arif'),),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: SingleChildScrollView(
           child: Column(
             children: [
-              TextField(
-                controller: pwdController,
-              ),
-              ElevatedButton(onPressed: () {}, child: const Text('Save Value')),
-              ElevatedButton(onPressed: () {}, child: const Text('Read Value')),
-              Text(password)
+              Text(operationResult, style: TextStyle(backgroundColor: Colors.green[200], color: Colors.black),),
+              const SizedBox(height: 24),
+              _textField('Insert ID', _txtId),
+              _textField('Insert Pizza Name', _txtName),
+              _textField('Insert Description', _txtDescription),
+              _textField('Insert Price', _txtPrice),
+              _textField('Insert Image URL', _txtImageUrl),
+              const SizedBox(height: 24),
+              ElevatedButton(
+                  onPressed: () {
+                    postPizza();
+                  },
+                  child: const Text('Send Post')
+              )
             ],
           ),
         ),
       ),
     );
   }
-```
-#### 3. Import flutter_secure_storage
-``` dart
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-```
-#### 4. Buat penyimpanan aman
-``` dart
-final storage = FlutterSecureStorage();
-final key = 'password';
-```
-#### 5. Tambahkan metode untuk menulis data ke penyimpanan aman
-``` dart
-Future writeToSecureStorage() async {
-    await storage.write(key: key, value: pwdController.text);
+
+  Future postPizza() async {
+    HttpHelper helper = HttpHelper();
+    Pizza pizza = Pizza(
+      id: int.parse(_txtId.text),
+      pizzaName: _txtName.text,
+      description: _txtDescription.text,
+      price: double.parse(_txtPrice.text),
+      imageUrl: _txtImageUrl.text,
+    );
+    String result = await helper.postPizza(pizza);
+    setState(() {
+      operationResult = result;
+    });
+  }
+
+  Column _textField(String label, TextEditingController controller) {
+    return Column(
+      children: [
+        TextField(
+          controller: controller,
+          decoration: InputDecoration(
+            labelText: label,
+          ),
+        ),
+        const SizedBox(height: 24),
+      ],
+    );
+  }
 }
 ```
-#### 6. Tambahkan metode untuk menulis data ke penyimpanan aman
-``` dart
-ElevatedButton(onPressed: () => writeToSecureStorage(), child: const Text('Save Value')),
+#### 3. Tambah floating action button pada main.dart
+```dart
+floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PizzaDetailScreen()),
+            );
+          }
+      ),
 ```
-#### 7. Tambahkan metode untuk membaca data dari penyimpanan aman
-``` dart
-Future<String> readFromSecureStorage() async {
-    return await storage.read(key: key) ?? '';
-}
-```
-#### 8. Tambahkan metode untuk membaca data dari penyimpanan aman
-``` dart
-ElevatedButton(onPressed: () => readFromSecureStorage().then((value) {
-                setState(() {
-                  password = value;
-                });
-              }), child: const Text('Read Value')),
-```
-#### 9. Jalankan aplikasi dan coba simpan dan baca data
-![image](images/14_06_09.png)
+#### 4. Menjalankan Aplikasi
+![3](images/W14_02.png)
+
+### Praktikum 3: PUT-ing Data

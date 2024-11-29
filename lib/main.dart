@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:mobile_dev/httphelper.dart';
+import 'package:mobile_dev/models/pizza.dart';
+import 'package:mobile_dev/pizza_detail.dart';
 
 void main() => runApp(const MyApp());
 
@@ -37,48 +40,72 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final storage = const FlutterSecureStorage();
-  final key = 'password';
+  int _counter = 0;
 
-  final pwdController = TextEditingController();
-  String password = '';
-
-  @override
-  void initState() {
-    super.initState();
+  void _incrementCounter() {
+    setState(() {
+      // This call to setState tells the Flutter framework that something has
+      // changed in this State, which causes it to rerun the build method below
+      // so that the display can reflect the updated values. If we changed
+      // _counter without calling setState(), then the build method would not be
+      // called again, and so nothing would appear to happen.
+      _counter++;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    // This method is rerun every time setState is called, for instance as done
+    // by the _incrementCounter method above.
+    //
+    // The Flutter framework has been optimized to make rerunning build methods
+    // fast, so that you can just rebuild anything that needs updating rather
+    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(title: const Text('Path Provider - Arif'),),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: pwdController,
-              ),
-              ElevatedButton(onPressed: () => writeToSecureStorage(), child: const Text('Save Value')),
-              ElevatedButton(onPressed: () => readFromSecureStorage().then((value) {
-                setState(() {
-                  password = value;
-                });
-              }), child: const Text('Read Value')),
-              Text(password)
-            ],
-          ),
-        ),
+      appBar: AppBar(
+        // TRY THIS: Try changing the color here to a specific color (to
+        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
+        // change color while the other colors stay the same.
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // Here we take the value from the MyHomePage object that was created by
+        // the App.build method, and use it to set our appbar title.
+        title: Text(widget.title),
       ),
+      body: FutureBuilder(
+          future: callPizzas(),
+          builder: (BuildContext context, AsyncSnapshot<List<Pizza>> snapshot) {
+            if (snapshot.hasError) {
+              return const Text('Something went wrong');
+            }
+            if (!snapshot.hasData) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return ListView.builder(
+              itemCount: (snapshot.data == null) ? 0 : snapshot.data!.length,
+              itemBuilder: (BuildContext context, int index) {
+                return ListTile(
+                  title: Text(snapshot.data![index].pizzaName),
+                  subtitle: Text(snapshot.data![index].description + ' - €' + snapshot.data![index].price.toString()),
+                );
+              },
+            );
+          },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PizzaDetailScreen()),
+            );
+          }
+      ),// This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 
-  Future writeToSecureStorage() async {
-    await storage.write(key: key, value: pwdController.text);
-  }
-
-  Future<String> readFromSecureStorage() async {
-    return await storage.read(key: key) ?? '';
+  Future<List<Pizza>> callPizzas() async {
+    HttpHelper httpHelper = HttpHelper();
+    List<Pizza> pizzas = await httpHelper.getPizzaList();
+    return pizzas;
   }
 }
